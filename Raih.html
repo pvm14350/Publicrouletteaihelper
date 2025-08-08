@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roulette AI Helper </title>
+    <style>
+        :root {
+            --primary-color: #d4af37;
+            --secondary-color: #e60000;
+            --background-color: #0a5c36;
+            --background-gradient: radial-gradient(circle at center, #0a5c36 0%, #083a23 100%);
+            --card-bg: rgba(10, 10, 10, 0.85);
+            --text-color: #f5f5dc;
+            --red-number: #e60000;
+            --black-number: #0a0a0a;
+            --zero-number: #0a5c36;
+            --button-primary: #e60000;
+            --button-secondary: #0a0a0a;
+            --highlight-color: #d4af37;
+            --font-main: 'Georgia', serif;
+            --font-title: 'Georgia', serif;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            background-image: var(--background-gradient);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        #app {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            border: 1px solid var(--primary-color);
+        }
+        
+        body.theme-casino {
+            --primary-color: #d4af37;
+            --secondary-color: #e60000;
+            --background-color: #0a5c36;
+            --background-gradient: radial-gradient(circle at center, #0a5c36 0%, #083a23 100%);
+            --card-bg: rgba(10, 10, 10, 0.85);
+            --text-color: #f5f5dc;
+            --red-number: #e60000;
+            --black-number: #0a0a0a;
+            --zero-number: #0a5c36;
+            --button-primary: #e60000;
+            --button-secondary: #0a0a0a;
+            --highlight-color: #d4af37;
+            --font-main: 'Georgia', serif;
+            --font-title: 'Georgia', serif;
+        }
+        
+        body.theme-royal {
+            --primary-color: #d4af37;
+            --secondary-color: #9b26b6;
+            --background-color: #4b0082;
+            --background-gradient: linear-gradient(135deg, #4b0082 0%, #2e004f 100%);
+            --card-bg: rgba(30, 0, 50, 0.9);
+            --text-color: #f5f5dc;
+            --red-number: #ff3366;
+            --black-number: #220033;
+            --zero-number: #663399;
+            --button-primary: #9b26b6;
+            --button-secondary: #220033;
+            --highlight-color: #d4af37;
+            --font-main: 'Palatino Linotype', 'Book Antiqua', serif;
+            --font-title: 'Garamond', serif;
+        }
+        
+        body.theme-night {
+            --primary-color: #a0a0a0;
+            --secondary-color: #00b4d8;
+            --background-color: #0d1b2a;
+            --background-gradient: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            --card-bg: rgba(26, 36, 56, 0.9);
+            --text-color: #e2e2e2;
+            --red-number: #ff6b6b;
+            --black-number: #1a1a2e;
+            --zero-number: #4cc9f0;
+            --button-primary: #00b4d8;
+            --button-secondary: #1a1a2e;
+            --highlight-color: #a0a0a0;
+            --font-main: 'Arial', sans-serif;
+            --font-title: 'Arial Narrow', sans-serif;
+        }
+        
+        .copyright {
+            position: absolute;
+            top: 26px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: cyan;
+            font-weight: normal;
+            font-size: 0.9em;
+            animation: blink 1.8s infinite;
+            opacity: 0.8;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .info-button {
+            position: absolute;
+            top: 20px;
+            left: 12px;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        .info-menu {
+            position: fixed;
+            top: 0;
+            left: -350px;
+            width: 320px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            padding: 20px;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .info-menu.open {
+            left: 0;
+        }
+        
+        .info-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .info-overlay.visible {
+            display: block;
+        }
+        
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 12px;
+        }
+        
+        .info-title {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.5em;
+        }
+        
+        .close-info {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.6em;
+            cursor: pointer;
+        }
+        
+        .info-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+        
+        .info-section p {
+            font-size: 0.85em;
+            line-height: 1.4;
+            margin-bottom: 0.8em;
+        }
+        
+        .info-section-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1em;
+        }
+        
+        .info-section ul {
+            padding-left: 20px;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        
+        .info-section li {
+            margin-bottom: 8px;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1.6em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-family: var(--font-title);
+        }
+        
+        .slogan {
+            text-align: center;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+        }
+        
+        .number-btn {
+            padding: 10px 0;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .number-btn.zero {
+            background-color: var(--zero-number);
+            color: white;
+            grid-column: span 2;
+            border-radius: 10px;
+        }
+        
+        .number-btn.red {
+            background-color: var(--red-number);
+            color: white;
+        }
+        
+        .number-btn.black {
+            background-color: var(--black-number);
+            color: white;
+        }
+        
+        .number-btn.hot {
+            box-shadow: 0 0 10px var(--highlight-color);
+            animation: pulse 1.5s infinite;
+            font-weight: bold;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px var(--highlight-color); font-weight: bold;}
+            50% { transform: scale(1.15); box-shadow: 0 0 17px var(--highlight-color); font-weight: bold;}
+            100% { transform: scale(1); box-shadow: 0 0 10px var(--highlight-color); font-weight: bold;}
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .primary {
+            background-color: var(--button-primary);
+            color: white;
+        }
+        
+        .secondary {
+            background-color: var(--button-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        
+        .history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 15px 0;
+            justify-content: center;
+            min-height: 40px;
+            padding: 10px;
+        }
+        
+        .history-number {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .history-number.zero {
+            background-color: var(--zero-number);
+            color: white;
+        }
+        
+        .history-number.red {
+            background-color: var(--red-number);
+            color: white;
+        }
+        
+        .history-number.black {
+            background-color: var(--black-number);
+            color: white;
+        }
+        
+        .prediction-section {
+            background: rgba(10, 10, 10, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            position: relative;
+            background-color: var(--card-bg);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            text-align: center;
+            font-family: var(--font-title);
+        }
+        
+        .predicted-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .predicted-number {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .zero {
+            background-color: var(--zero-number);
+            color: white;
+        }
+        
+        .red {
+            background-color: var(--red-number);
+            color: white;
+        }
+        
+        .black {
+            background-color: var(--black-number);
+            color: white;
+        }
+        
+        .confidence {
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .confidence-level {
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            width: 0%;
+        }
+        
+        .quick-input {
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .quick-input input {
+            width: 80%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
+            background: rgba(10, 10, 0, 0.7);
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .quick-input input::placeholder {
+            color: cyan !important;
+            opacity: 0.9;
+        }
+    
+        .info-message {
+            font-style: italic;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .cold-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--primary-color);
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        
+        .cold-numbers-info {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .stats-info {
+            font-size: 0.9em;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .cold-zone {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-top: 8px;
+            padding: 5px;
+            border-radius: 5px;
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .ml-info {
+            font-size: 0.7em;
+            color: var(--primary-color);
+            text-align: center;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        .wheel-heatmap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .wheel-segment {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8em;
+            transition: background 0.3s;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 3px rgba(0,0,0,0.3);
+        }
+        
+        .settings-menu {
+            position: fixed;
+            top: 0;
+            left: -350px;
+            width: 320px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            padding: 20px;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .settings-menu.open {
+            left: 0;
+        }
+        
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .settings-overlay.visible {
+            display: block;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        .settings-title {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.5em;
+        }
+        
+        .close-settings {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        .settings-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+        
+        .settings-section-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .theme-option {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            background-color: var(--card-bg);
+        }
+        
+        .theme-option:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .theme-option.active {
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 10px var(--highlight-color);
+        }
+        
+        .theme-option.casino {
+            background: linear-gradient(135deg, #0a5c36 0%, #083a23 100%);
+            color: #f5f5dc;
+            border: 1px solid #d4af37;
+        }
+        
+        .theme-option.royal {
+            background: linear-gradient(135deg, #4b0082 0%, #2e004f 100%);
+            color: #f5f5dc;
+            border: 1px solid #d4af37;
+        }
+        
+        .theme-option.night {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: #e2e2e2;
+            border: 1px solid #00b4d8;
+        }
+        
+        .settings-group {
+            margin-bottom: 15px;
+        }
+        
+        .settings-label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .settings-input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+            background-color: rgba(255,255,255,0.1);
+            color: var(--text-color);
+        }
+        
+        .settings-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .settings-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .settings-button-toggle {
+            position: fixed;
+            top: 22px;
+            right: 22px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .settings-button-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .donate-button {
+            position: fixed;
+            top: 63px;
+            left: 336px;
+            background-color: #a7c7e7;
+            color: #a7c7e7;
+            border: none;
+            border-radius: 40%;
+            width: 28px;
+            height: 28px;
+            font-size: 1em;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .donate-button:hover {
+            transform: scale(1.1);
+            background-color: #005ea6;
+        }
+
+        .donate-button::after {
+            content: "♥";
+            color: red;
+            font-size: 1.5em;
+        }
+        
+        .donate-link {
+            color: cyan;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border-bottom: 0.1px dashed var(--primary-color);
+        }
+
+        .donate-link:hover {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+
+        /* Styles pour la modal de don */
+        .donation-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background-color: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 2000;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.7);
+            display: none;
+        }
+
+        .donation-modal.open {
+            display: block;
+        }
+
+        .donation-modal h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .donation-modal p {
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .donation-modal .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .donation-modal button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .donation-modal .donate-btn {
+            background-color: var(--button-primary);
+            color: white;
+            border: none;
+        }
+
+        .donation-modal .reset-btn {
+            background-color: var(--button-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1999;
+            display: none;
+        }
+
+        .modal-overlay.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body class="theme-casino">
+    <div class="copyright">© MarioRLT</div>
+    
+    <button class="info-button" id="infoToggle">ℹ️</button>
+    <div class="info-overlay" id="infoOverlay"></div>
+    <div class="info-menu" id="infoMenu">
+        <div class="info-header">
+            <h2 class="info-title">Informations</h2>
+            <button class="close-info" id="closeInfo">&times;</button>
+        </div>
+        
+        <div class="info-section">
+            <h3 class="info-section-title">Avertissement</h3>
+            <p>Ce logiciel est un outil d'aide à la décision pour le jeu de la roulette. Il ne garantit en aucun cas des gains et ne doit pas être considéré comme une méthode infaillible.</p>
+            <p>Le jeu comporte des risques financiers. Jouez de manière responsable et ne misez que ce que vous pouvez vous permettre de perdre.</p>
+            <p>Roulette AI Helper a été conçu par ©MarioRLT en 2025</p>
+            <p>Art.L.335-2 du CPI: Toute reproduction est interdite et passible d'une amende de 300 000€ et 3 ans d'emprisonnement.</p>
+   
+        </div>
+        
+        <div class="info-section">
+            <h3 class="info-section-title">Tutoriel</h3>
+            <p><strong>1. Saisie des numéros :</strong> Cliquez sur les numéros ou entrez une séquence complète dans le champ de saisie rapide.</p>
+            <p><strong>2. Analyse :</strong> L'outil utilise plusieurs algorithmes (Loi du Tiers, MDT, anomalies statistiques) pour générer des prédictions.</p>
+            <p><strong>3. Prédictions :</strong> Les numéros en surbrillance sont les prédictions du système, avec un indicateur de confiance.</p>
+            <p><strong>4. Heatmap :</strong> Affiche la fréquence d'apparition des numéros sur la roue pour visualiser les zones chaudes/froides.</p>
+        </div>
+        
+        <div class="info-section">
+            <h3 class="info-section-title">Fonctionnalités</h3>
+            <ul>
+                <li>Analyse en temps réel des résultats</li>
+                <li>Détection des numéros froids (Loi du Tiers)</li>
+                <li>Prédiction basée sur la distance entre numéros (MDT)</li>
+                <li>Détection des anomalies statistiques</li>
+                <li>Muni d'intelligence artificielle adaptative, les prédictions s'améliorent au fil des tours</li>
+                <li>Combinaison intelligente des méthodes via machine AI learning</li>
+                <li>Visualisation des zones chaudes/froides sur la roue</li>
+                   
+        <a href="https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a" 
+           target="_blank" 
+           class="donate-link">
+          Soutenir le développement de l'outil ici 
+        </a>
+    </p>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Bouton de don -->
+    <a href="https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a?utm_source=consapp_download" 
+       target="_blank" 
+       class="donate-button" 
+       title="Faire un don via PayPal">
+    </a>
+    
+    <!-- Modal de don -->
+    <div class="modal-overlay" id="donationOverlay"></div>
+    <div class="donation-modal" id="donationModal">
+        <h2>Session Premium Requise</h2>
+        <p>Vous avez atteint 110 spins. Pour continuer à bénéficier des prédictions avancées de notre intelligence artificielle adaptative, nous vous invitons à soutenir le développement de l'outil.</p>
+        <p>L'IA apprend de votre session en cours - la réinitialiser maintenant réduirait considérablement sa précision.</p>
+        <p>En faisant un don, vous débloquez :</p>
+        <ul>
+            <li>La poursuite de votre session actuelle</li>
+            <li>Des prédictions plus précises grâce à l'apprentissage continu</li>
+            <li>L'accès à des statistiques avancées</li>
+        </ul>
+        <div class="buttons">
+            <button class="donate-btn" id="continueDonateBtn">Faire un don et continuer</button>
+            <button class="reset-btn" id="resetSessionBtn">Réinitialiser la session</button>
+        </div>
+    </div>
+    
+    <button class="settings-button-toggle" id="settingsToggle">⚙️</button>
+    
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-menu" id="settingsMenu">
+        <div class="settings-header">
+            <h2 class="settings-title">Paramètres</h2>
+            <button class="close-settings" id="closeSettings">&times;</button>
+        </div>
+        
+        <div class="settings-section">
+            <h3 class="settings-section-title">Apparence</h3>
+            
+            <div class="settings-group">
+                <label class="settings-label">Thème</label>
+                <div class="theme-selector">
+                    <div class="theme-option casino active" data-theme="casino">Casino</div>
+                    <div class="theme-option royal" data-theme="royal">Royal</div>
+                    <div class="theme-option night" data-theme="night">Nuit</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3 class="settings-section-title">Paramètres des Modules</h3>
+            
+            <div class="settings-group">
+                <label class="settings-label">Poids Loi des Tiers</label>
+                <input type="range" class="settings-input" id="tiersWeight" min="0.1" max="0.8" step="0.05" value="0.4">
+                <span id="tiersWeightValue">0.4</span>
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Poids MDT</label>
+                <input type="range" class="settings-input" id="mdtWeight" min="0.1" max="0.8" step="0.05" value="0.3">
+                <span id="mdtWeightValue">0.3</span>
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Poids Anomalies</label>
+                <input type="range" class="settings-input" id="anomaliesWeight" min="0.1" max="0.8" step="0.05" value="0.3">
+                <span id="anomaliesWeightValue">0.3</span>
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Taille fenêtre MDT</label>
+                <input type="number" class="settings-input" id="mdtWindowSize" min="5" max="30" value="16">
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Seuil froid (spins)</label>
+                <input type="number" class="settings-input" id="coldThreshold" min="50" max="200" value="92">
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3 class="settings-section-title">Personnalisation</h3>
+            
+            <div class="settings-group">
+                <label class="settings-label">Nombre de prédictions</label>
+                <input type="number" class="settings-input" id="predictionCount" min="1" max="10" value="5">
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Taille historique</label>
+                <input type="number" class="settings-input" id="historySize" min="5" max="50" value="12">
+            </div>
+        </div>
+        
+        <button class="settings-button" id="saveSettings">Enregistrer les paramètres</button>
+        <button class="settings-button secondary" id="resetSettings">Réinitialiser</button>
+    </div>
+    
+    <div id="app">
+        <h1>Roulette AI Helper</h1>
+        <div class="slogan">AI Machine 360° Learning</div>
+        
+        <div class="number-pad" id="numberPad">
+            <div class="number-btn zero">0</div>
+            <div class="number-btn red">1</div>
+            <div class="number-btn black">2</div>
+            <div class="number-btn red">3</div>
+            <div class="number-btn black">4</div>
+            <div class="number-btn red">5</div>
+            <div class="number-btn black">6</div>
+            <div class="number-btn red">7</div>
+            <div class="number-btn black">8</div>
+            <div class="number-btn red">9</div>
+            <div class="number-btn black">10</div>
+            <div class="number-btn black">11</div>
+            <div class="number-btn red">12</div>
+            <div class="number-btn black">13</div>
+            <div class="number-btn red">14</div>
+            <div class="number-btn black">15</div>
+            <div class="number-btn red">16</div>
+            <div class="number-btn black">17</div>
+            <div class="number-btn red">18</div>
+            <div class="number-btn red">19</div>
+            <div class="number-btn black">20</div>
+            <div class="number-btn red">21</div>
+            <div class="number-btn black">22</div>
+            <div class="number-btn red">23</div>
+            <div class="number-btn black">24</div>
+            <div class="number-btn red">25</div>
+            <div class="number-btn black">26</div>
+            <div class="number-btn red">27</div>
+            <div class="number-btn black">28</div>
+            <div class="number-btn black">29</div>
+            <div class="number-btn red">30</div>
+            <div class="number-btn black">31</div>
+            <div class="number-btn red">32</div>
+            <div class="number-btn black">33</div>
+            <div class="number-btn red">34</div>
+            <div class="number-btn black">35</div>
+            <div class="number-btn red">36</div>
+        </div>
+        
+        <div class="controls">
+            <button class="secondary" id="undoButton">Annuler</button>
+            <button class="secondary" id="resetButton">Réinitialiser</button>
+            <button class="secondary" id="toggleHeatmapBtn">Afficher Heatmap</button>
+        </div>
+        
+        <div class="quick-input">
+            <input type="text" id="bulkNumbersInput" placeholder="Saisir l'historique (ex:34,4,21,5,2,30...)">
+            <button class="primary" id="addBulkButton">Ajouter</button>
+        </div>
+        
+        <div class="history" id="history">
+            <p class="info-message">Historique vide. Ajoutez des numéros pour commencer.</p>
+        </div>
+        
+        <div class="prediction-section">
+            <h3 class="section-title">Loi du ⅓ (<span id="coldThresholdDisplay">92</span> derniers spins)</h3>
+            <div class="cold-counter" id="coldCounter"></div>
+            <div class="cold-numbers-info" id="coldNumbersInfo"></div>
+        </div>
+        
+        <div class="prediction-section">
+            <h3 class="section-title">Prédiction intelligente</h3>
+            <div id="convergentInfo"></div>
+            <div class="predicted-numbers" id="convergentNumbers"></div>
+            <div class="confidence">
+                <div class="confidence-level" id="convergentConfidence"></div>
+            </div>
+        </div>
+
+        <div id="heatmapContainer" style="display: none;">
+            <div class="prediction-section">
+                <h3 class="section-title">Heatmap du cylindre</h3>
+                <div class="wheel-heatmap" id="wheelHeatmap"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+        const WHEEL_LAYOUT = [
+            0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
+        ];
+        
+        // Constantes avec valeurs par défaut
+        const DEFAULT_SETTINGS = {
+            theme: 'casino',
+            weights: {
+                tiers: 0.4,
+                mdt: 0.3,
+                anomalies: 0.3
+            },
+            mdtWindowSize: 16,
+            coldThreshold: 92,
+            predictionCount: 5,
+            historySize: 12
+        };
+        
+        // État de l'application
+        const appState = {
+            sequence: [],
+            spinHistory: [],
+            coldNumbers: [],
+            coldZones: [],
+            numberStats: Array(37).fill().map(() => ({ 
+                lastSeen: 0,
+                occurrences: 0,
+                frequency: 0
+            })),
+            lastNumber: null,
+            settings: {...DEFAULT_SETTINGS}
+        };
+
+        // État Machine Learning
+        const mlState = {
+            weights: {...DEFAULT_SETTINGS.weights},
+            learningRate: 0.05,
+            memoryWindow: 100,
+            correctHistory: [],
+            lastPrediction: null,
+            lastCorrect: false,
+            trendChangeDetected: false
+        };
+
+        // Fonctions principales
+        function addNumber(num) {
+            if (isNaN(num) || num < 0 || num > 36) return;
+            
+            // Vérifier si nous avons atteint 110 spins et afficher la modal
+            if (appState.sequence.length === 110) {
+                showDonationModal();
+                return; // Empêcher l'ajout de nouveaux numéros tant que l'utilisateur n'a pas choisi
+            }
+            
+            // Détection de changement de tendance
+            if (appState.sequence.length > 100) {
+                detectTrendChanges();
+            }
+            
+            appState.sequence.push(num);
+            updateNumberStats(num);
+            processMDTNumber(num);
+            
+            // Apprentissage automatique
+            if (mlState.lastPrediction) {
+                adjustWeights(num);
+            }
+            
+            refreshInterface();
+        }
+
+        function updateNumberStats(number) {
+            const stats = appState.numberStats[number];
+            stats.lastSeen = appState.sequence.length;
+            stats.occurrences += 1;
+            stats.frequency = stats.occurrences / appState.sequence.length;
+        }
+
+        function processMDTNumber(newNumber) {
+            if (appState.lastNumber === null) {
+                appState.spinHistory.push({ number: newNumber, distance: 0 });
+                appState.lastNumber = newNumber;
+                return;
+            }
+
+            const wheelPos = WHEEL_LAYOUT.indexOf(newNumber);
+            const lastWheelPos = WHEEL_LAYOUT.indexOf(appState.lastNumber);
+            
+            const forwardDist = (wheelPos - lastWheelPos + 37) % 37;
+            const backwardDist = (lastWheelPos - wheelPos + 37) % 37;
+            const distance = Math.min(forwardDist, backwardDist);
+            
+            appState.spinHistory.push({ number: newNumber, distance });
+            
+            // Utilise la taille de fenêtre configurée
+            const windowSize = appState.settings.mdtWindowSize;
+            if (appState.spinHistory.length > windowSize) {
+                appState.spinHistory.shift();
+            }
+            
+            appState.lastNumber = newNumber;
+        }
+
+        // Fonctions d'analyse
+        function detectColdZones(coldNumbers) {
+            const coldZones = [];
+            const coldPositions = coldNumbers.map(num => WHEEL_LAYOUT.indexOf(num)).sort((a,b) => a-b);
+            
+            for (let i = 0; i < coldPositions.length; i++) {
+                const startPos = coldPositions[i];
+                let zone = [WHEEL_LAYOUT[startPos]];
+                
+                for (let j = 1; j < 3; j++) {
+                    const nextPos = (startPos + j) % WHEEL_LAYOUT.length;
+                    if (coldNumbers.includes(WHEEL_LAYOUT[nextPos])) {
+                        zone.push(WHEEL_LAYOUT[nextPos]);
+                    } else {
+                        break;
+                    }
+                }
+                
+                if (zone.length >= 3) {
+                    coldZones.push(zone);
+                    i += zone.length - 1;
+                }
+            }
+            
+            return coldZones;
+        }
+
+        function findDominantDistance() {
+            if (appState.spinHistory.length < 5) return null;
+            
+            const distanceMap = {};
+            appState.spinHistory.forEach(spin => {
+                const roundedDist = Math.round(spin.distance);
+                distanceMap[roundedDist] = (distanceMap[roundedDist] || 0) + 1;
+            });
+            
+            let maxCount = 0, dominantDist = null;
+            Object.entries(distanceMap).forEach(([dist, count]) => {
+                if (count > maxCount) {
+                    maxCount = count;
+                    dominantDist = parseInt(dist);
+                }
+            });
+            
+            if (!dominantDist || maxCount < 2) return null;
+            
+            const confidence = Math.min(100, Math.round((maxCount / appState.spinHistory.length) * 150));
+            return { distance: dominantDist, confidence };
+        }
+
+        function detectStatisticalAnomalies() {
+            const N = appState.sequence.length;
+            if (N < 37) return [];
+            
+            const expectedMean = N / 37;
+            const stdDev = Math.sqrt(N * (1/37) * (36/37));
+            const anomalies = [];
+            
+            for (let num = 0; num <= 36; num++) {
+                const occurrences = appState.numberStats[num].occurrences;
+                if (Math.abs(occurrences - expectedMean) > 2 * stdDev) {
+                    anomalies.push(num);
+                }
+            }
+            return anomalies;
+        }
+
+        // Fonctions Machine Learning
+        function detectTrendChanges() {
+            if (appState.sequence.length < 60) return false;
+            
+            const recent = appState.sequence.slice(-30);
+            const old = appState.sequence.slice(-60, -30);
+            const chiSquare = calculateChiSquare(old, recent);
+            
+            if (chiSquare > 50) {
+                mlState.trendChangeDetected = true;
+                // Réinitialisation partielle des poids
+                Object.keys(mlState.weights).forEach(k => {
+                    mlState.weights[k] = 0.3 + Math.random() * 0.2;
+                });
+                normalizeWeights();
+                return true;
+            }
+            return false;
+        }
+
+        function calculateChiSquare(old, recent) {
+            const oldCounts = Array(37).fill(0);
+            const recentCounts = Array(37).fill(0);
+            
+            old.forEach(n => oldCounts[n]++);
+            recent.forEach(n => recentCounts[n]++);
+            
+            let chiSquare = 0;
+            for (let i = 0; i < 37; i++) {
+                const expected = oldCounts[i] * recent.length / old.length;
+                if (expected > 0) {
+                    chiSquare += Math.pow(recentCounts[i] - expected, 2) / expected;
+                }
+            }
+            return chiSquare;
+        }
+
+        function adjustWeights(correctNumber) {
+            const wasCorrect = mlState.lastPrediction && mlState.lastPrediction.convergentNumbers.includes(correctNumber);
+            mlState.lastCorrect = wasCorrect;
+            mlState.correctHistory.push(wasCorrect);
+            
+            if (mlState.correctHistory.length > mlState.memoryWindow) {
+                mlState.correctHistory.shift();
+            }
+            
+            // Ajustement dynamique du learning rate
+            const successRate = mlState.correctHistory.filter(Boolean).length / mlState.correctHistory.length;
+            mlState.learningRate = 0.02 + 0.06 * (1 - successRate);
+            
+            // Ajustement des poids
+            if (mlState.lastPrediction) {
+                Object.keys(mlState.weights).forEach(module => {
+                    const moduleKey = 'used' + module.charAt(0).toUpperCase() + module.slice(1);
+                    const impact = mlState.lastPrediction[moduleKey] ? 1 : 0;
+                    
+                    if (wasCorrect) {
+                        mlState.weights[module] += mlState.learningRate * impact;
+                    } else {
+                        mlState.weights[module] -= mlState.learningRate * 0.5 * impact;
+                    }
+                    
+                    mlState.weights[module] = Math.max(0.1, Math.min(0.8, mlState.weights[module]));
+                });
+                
+                normalizeWeights();
+            }
+        }
+
+        function normalizeWeights() {
+            const total = Object.values(mlState.weights).reduce((sum, w) => sum + w, 0);
+            Object.keys(mlState.weights).forEach(module => {
+                mlState.weights[module] /= total;
+            });
+        }
+
+        // Fonctions de prédiction
+        function checkConvergence() {
+            const infoDiv = document.getElementById('convergentInfo');
+            const numbersDiv = document.getElementById('convergentNumbers');
+            const confidenceBar = document.getElementById('convergentConfidence');
+            
+            numbersDiv.innerHTML = '';
+            confidenceBar.style.width = "0%";
+            
+            if (appState.sequence.length < 30) {
+                infoDiv.innerHTML = '<p class="info-message">Minimum 30 spins requis pour l\'analyse</p>';
+                return;
+            }
+            
+            // Analyse des différents modules
+            const tiersNumbers = getTiersNumbers();
+            const mdtPrediction = getMdtPrediction();
+            const anomalies = detectStatisticalAnomalies();
+            
+            // Combinaison intelligente avec ML
+            const { convergentNumbers, confidence } = combinePredictions(tiersNumbers, mdtPrediction, anomalies);
+            
+            // Affichage
+            displayResults(infoDiv, numbersDiv, confidenceBar, convergentNumbers, confidence, 
+                         tiersNumbers, mdtPrediction, anomalies);
+            
+            // Stockage pour ML
+            storePrediction(convergentNumbers, tiersNumbers, mdtPrediction, anomalies);
+        }
+
+        function getTiersNumbers() {
+            const coldThreshold = appState.settings.coldThreshold;
+            if (appState.sequence.length < coldThreshold) return [];
+            
+            const lastSpins = appState.sequence.slice(-coldThreshold);
+            const coldNumbers = [];
+            
+            // Vérification optimisée des numéros manquants
+            for (let num = 0; num <= 36; num++) {
+                if (!lastSpins.includes(num)) {
+                    coldNumbers.push(num);
+                    // Met à jour lastSeen pour les numéros manquants
+                    if (appState.numberStats[num].lastSeen === 0) {
+                        appState.numberStats[num].lastSeen = appState.sequence.length;
+                    }
+                }
+            }
+            
+            appState.coldNumbers = coldNumbers;
+            appState.coldZones = detectColdZones(coldNumbers);
+            
+            return coldNumbers;
+        }
+
+        function getMdtPrediction() {
+            if (!appState.lastNumber || appState.spinHistory.length < 5) return null;
+            
+            const dominantDistance = findDominantDistance();
+            if (!dominantDistance) return null;
+
+            // Nouveau calcul de confiance plus conservateur
+            const baseConfidence = dominantDistance.confidence || 30;
+            const confidence = Math.max(5, Math.min(70, baseConfidence * 0.7)); // Limite à 70% max pour MDT
+            
+            return {
+                number: WHEEL_LAYOUT[(WHEEL_LAYOUT.indexOf(appState.lastNumber) + dominantDistance.distance) % 37],
+                confidence: confidence
+            };
+        }
+
+        function combinePredictions(tiersNumbers, mdtPrediction, anomalies) {
+            const numberScores = {};
+            
+            // Score chaque numéro basé sur les modules
+            tiersNumbers.forEach(num => {
+                const coldIntensity = 1 + (appState.sequence.length - appState.numberStats[num].lastSeen) / 100;
+                numberScores[num] = (numberScores[num] || 0) + mlState.weights.tiers * coldIntensity;
+            });
+            
+            if (mdtPrediction) {
+                numberScores[mdtPrediction.number] = (numberScores[mdtPrediction.number] || 0) + mlState.weights.mdt * (mdtPrediction.confidence / 100);
+            }
+            
+            anomalies.forEach(num => {
+                numberScores[num] = (numberScores[num] || 0) + mlState.weights.anomalies;
+            });
+            
+            // Trier par score
+            const sortedNumbers = Object.entries(numberScores)
+                .sort((a, b) => b[1] - a[1])
+                .map(entry => ({number: parseInt(entry[0]), score: entry[1]}));
+            
+            // Sélection dynamique du nombre de prédictions
+            const numPredictions = appState.settings.predictionCount;
+            const convergentNumbers = sortedNumbers.slice(0, numPredictions).map(item => item.number);
+            
+            // Calcul de la confiance
+            let confidence = 0;
+            if (sortedNumbers.length > 0) {
+                // Nouveau calcul plus conservateur
+                const maxScore = sortedNumbers[0].score;
+                const avgScore = sortedNumbers.reduce((sum, item) => sum + item.score, 0) / sortedNumbers.length;
+                
+                // Base confidence on how much the top numbers stand out from average
+                if (avgScore > 0) {
+                    confidence = Math.min(95, Math.round((maxScore / (maxScore + avgScore)) * 100));
+                }
+                
+                // Apply sequence length modifier more conservatively
+                const sequenceModifier = Math.min(1, Math.log(appState.sequence.length + 1) / 5);
+                confidence = Math.round(confidence * (0.5 + 0.5 * sequenceModifier));
+                
+                // Ensure minimum confidence when we have predictions
+                if (confidence < 10 && convergentNumbers.length > 0) confidence = 10;
+            }
+            
+            return { convergentNumbers, confidence };
+        }
+
+        function displayResults(infoDiv, numbersDiv, confidenceBar, numbers, confidence, tiersNumbers, mdtPrediction, anomalies) {
+            // Vérifier et corriger la confiance si NaN
+            if (isNaN(confidence)) {
+                confidence = 0;
+            }
+            
+            let infoText = "> ";
+            const modulesUsed = [];
+            
+            if (numbers.some(n => tiersNumbers.includes(n))) modulesUsed.push("Loi des Tiers");
+            if (mdtPrediction && numbers.includes(mdtPrediction.number)) modulesUsed.push("MDT");
+            if (numbers.some(n => anomalies.includes(n))) modulesUsed.push("Anomalies");
+                        
+            // Nouvel affichage nuancé de la confiance
+            if (confidence < 30) {
+                infoText = "> Faible confiance - " + (modulesUsed.join(" + ") || "Signal faible");
+            } else if (confidence < 60) {
+                infoText = "> Confiance modérée - " + modulesUsed.join(" + ");
+            } else {
+                infoText = "> Bonne confiance - " + modulesUsed.join(" + ");
+            }
+            
+            if (mlState.trendChangeDetected) {
+                infoText += " | Changement de tendance détecté!";
+                mlState.trendChangeDetected = false;
+            }
+            
+            infoDiv.innerHTML = '<p>' + infoText + ' (' + confidence + '% confiance)</p>';
+            
+            // Affichage ML
+            const mlInfo = document.createElement('div');
+            mlInfo.className = 'ml-info';
+            mlInfo.textContent = 'ML: ' + (mlState.lastCorrect ? '✓' : (mlState.lastPrediction ? '✗' : '?')) + ' | ' +
+                'Poids: Tiers ' + mlState.weights.tiers.toFixed(2) + ' | ' +
+                'MDT ' + mlState.weights.mdt.toFixed(2) + ' | ' +
+                'Anomalies ' + mlState.weights.anomalies.toFixed(2);
+            
+            infoDiv.appendChild(mlInfo);
+            
+            // Affichage des numéros
+            numbers.forEach(num => {
+                const colorClass = num === 0 ? 'zero' : RED_NUMBERS.includes(num) ? 'red' : 'black';
+                const numElement = document.createElement('div');
+                numElement.className = 'predicted-number ' + colorClass;
+                numElement.textContent = num;
+                numbersDiv.appendChild(numElement);
+            });
+            
+            confidenceBar.style.width = confidence + '%';
+            updateHighlightedNumbers(numbers);
+        }
+
+        function storePrediction(numbers, tiersNumbers, mdtPrediction, anomalies) {
+            mlState.lastPrediction = {
+                convergentNumbers: numbers,
+                usedTiers: numbers.some(n => tiersNumbers.includes(n)),
+                usedMdt: mdtPrediction && numbers.includes(mdtPrediction.number),
+                usedAnomalies: numbers.some(n => anomalies.includes(n))
+            };
+        }
+
+        // Fonctions d'interface
+        function updateColdNumbersDisplay() {
+            const infoDiv = document.getElementById('coldNumbersInfo');
+            const counterDiv = document.getElementById('coldCounter');
+            const thresholdDisplay = document.getElementById('coldThresholdDisplay');
+            
+            const coldThreshold = appState.settings.coldThreshold;
+            thresholdDisplay.textContent = coldThreshold;
+            
+            if (appState.sequence.length < coldThreshold) {
+                infoDiv.innerHTML = '<div class="stats-info">Analyse en cours (' + appState.sequence.length + '/' + coldThreshold + ' spins)</div>';
+            } else {
+                const lastSpins = appState.sequence.slice(-coldThreshold);
+                const uniqueCount = new Set(lastSpins).size;
+                const coldNumbers = appState.coldNumbers;
+                
+                let infoHTML = '<div class="stats-info">' + uniqueCount + '/37 numéros uniques</div>';
+                
+                if (coldNumbers.length > 0) {
+                    infoHTML += '<div class="cold-numbers-list"><strong>Numéros manquants (' + coldNumbers.length + ') :</strong> ' + coldNumbers.join(', ') + '</div>';
+                    
+                    // Affichage des zones froides
+                    if (appState.coldZones.length > 0) {
+                        appState.coldZones.forEach((zone, index) => {
+                            infoHTML += '<div class="cold-zone">Zone froide ' + (index+1) + ': ' + zone.join(' → ') + '</div>';
+                        });
+                    }
+                } else {
+                    infoHTML += '<div>Tous les numéros sont apparus</div>';
+                }
+                
+                infoDiv.innerHTML = infoHTML;
+            }
+            
+            counterDiv.textContent = appState.sequence.length;
+        }
+
+        function updateHistoryDisplay() {
+            const historyDiv = document.getElementById('history');
+            
+            if (appState.sequence.length === 0) {
+                historyDiv.innerHTML = '<p class="info-message">Historique vide. Ajoutez des numéros pour commencer.</p>';
+                return;
+            }
+            
+            const historySize = appState.settings.historySize;
+            let displaySequence = appState.sequence.slice(-historySize);
+            let html = '';
+            
+            displaySequence.forEach(num => {
+                const colorClass = num === 0 ? 'zero' : RED_NUMBERS.includes(num) ? 'red' : 'black';
+                html += '<span class="history-number ' + colorClass + '">' + num + '</span>';
+            });
+            
+            if (appState.sequence.length > historySize) {
+                html = '<span class="history-number">... (' + (appState.sequence.length - historySize) + '+)</span>' + html;
+            }
+            
+            historyDiv.innerHTML = html;
+        }
+
+        function updateHighlightedNumbers(numbers) {
+            clearHighlightedNumbers();
+            numbers.forEach(num => {
+                document.querySelectorAll('.number-btn').forEach(btn => {
+                    if (parseInt(btn.textContent) === num) {
+                        btn.classList.add('hot');
+                    }
+                });
+            });
+        }
+
+        function clearHighlightedNumbers() {
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                btn.classList.remove('hot');
+            });
+        }
+
+        function updateWheelHeatmap() {
+            const heatmap = document.getElementById('wheelHeatmap');
+            heatmap.innerHTML = '';
+            
+            const occurrences = Array(37).fill(0);
+            appState.sequence.forEach(num => occurrences[num]++);
+            
+            WHEEL_LAYOUT.forEach(num => {
+                const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.textContent = num;
+                
+                const frequency = occurrences[num] / appState.sequence.length * 37 * 100;
+                const intensity = Math.min(100, frequency);
+                
+                if (num === 0) {
+                    segment.style.backgroundColor = 'rgba(10, 92, 54, ' + (intensity/100) + ')';
+                    segment.style.color = intensity > 60 ? 'white' : 'var(--text-color)';
+                } else if (RED_NUMBERS.includes(num)) {
+                    segment.style.backgroundColor = 'rgba(230, 0, 0, ' + (0.3 + intensity/200) + ')';
+                    segment.style.color = 'white';
+                } else {
+                    segment.style.backgroundColor = 'rgba(50, 50, 50, ' + (0.4 + intensity/200) + ')';
+                    segment.style.color = intensity > 40 ? 'var(--primary-color)' : 'var(--text-color)';
+                }
+                
+                heatmap.appendChild(segment);
+            });
+        }
+
+        function toggleHeatmap() {
+            const container = document.getElementById('heatmapContainer');
+            const btn = document.getElementById('toggleHeatmapBtn');
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                btn.textContent = 'Masquer Heatmap';
+                updateWheelHeatmap();
+            } else {
+                container.style.display = 'none';
+                btn.textContent = 'Afficher Heatmap';
+            }
+        }
+
+        function addBulkNumbers() {
+            const input = document.getElementById('bulkNumbersInput').value.trim();
+            if (!input) return;
+            
+            input.split(',').forEach(numStr => {
+                const num = parseInt(numStr.trim());
+                if (!isNaN(num) && num >= 0 && num <= 36) {
+                    addNumber(num);
+                }
+            });
+            
+            document.getElementById('bulkNumbersInput').value = '';
+        }
+
+        function undoLast() {
+            if (appState.sequence.length === 0) return;
+            
+            const removed = appState.sequence.pop();
+            if (appState.spinHistory.length > 0 && appState.spinHistory[appState.spinHistory.length-1].number === removed) {
+                appState.spinHistory.pop();
+            }
+            
+            appState.lastNumber = appState.sequence[appState.sequence.length-1] || null;
+            refreshInterface();
+        }
+
+        function reset() {
+            appState.sequence = [];
+            appState.spinHistory = [];
+            appState.lastNumber = null;
+            appState.coldNumbers = [];
+            appState.coldZones = [];
+            appState.numberStats = Array(37).fill().map(() => ({ lastSeen: 0, occurrences: 0, frequency: 0 }));
+            
+            // Réinitialisation partielle du ML
+            mlState.weights = {...appState.settings.weights};
+            mlState.correctHistory = [];
+            mlState.lastPrediction = null;
+            
+            clearHighlightedNumbers();
+            refreshInterface();
+        }
+
+        function refreshInterface() {
+            updateHistoryDisplay();
+            updateColdNumbersDisplay();
+            checkConvergence();
+            
+            if (document.getElementById('heatmapContainer').style.display !== 'none') {
+                updateWheelHeatmap();
+            }
+        }
+
+        // Fonctions de gestion des paramètres
+        function openSettings() {
+            document.getElementById('settingsMenu').classList.add('open');
+            document.getElementById('settingsOverlay').classList.add('visible');
+            
+            // Charger les paramètres actuels dans le formulaire
+            document.getElementById('tiersWeight').value = appState.settings.weights.tiers;
+            document.getElementById('tiersWeightValue').textContent = appState.settings.weights.tiers.toFixed(2);
+            
+            document.getElementById('mdtWeight').value = appState.settings.weights.mdt;
+            document.getElementById('mdtWeightValue').textContent = appState.settings.weights.mdt.toFixed(2);
+            
+            document.getElementById('anomaliesWeight').value = appState.settings.weights.anomalies;
+            document.getElementById('anomaliesWeightValue').textContent = appState.settings.weights.anomalies.toFixed(2);
+            
+            document.getElementById('mdtWindowSize').value = appState.settings.mdtWindowSize;
+            document.getElementById('coldThreshold').value = appState.settings.coldThreshold;
+            document.getElementById('predictionCount').value = appState.settings.predictionCount;
+            document.getElementById('historySize').value = appState.settings.historySize;
+            
+            // Mettre à jour la sélection du thème
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.theme === appState.settings.theme) {
+                    option.classList.add('active');
+                }
+            });
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsMenu').classList.remove('open');
+            document.getElementById('settingsOverlay').classList.remove('visible');
+        }
+
+        function saveSettings() {
+            // Enregistrer les nouveaux paramètres
+            appState.settings = {
+                theme: appState.settings.theme,
+                weights: {
+                    tiers: parseFloat(document.getElementById('tiersWeight').value),
+                    mdt: parseFloat(document.getElementById('mdtWeight').value),
+                    anomalies: parseFloat(document.getElementById('anomaliesWeight').value)
+                },
+                mdtWindowSize: parseInt(document.getElementById('mdtWindowSize').value),
+                coldThreshold: parseInt(document.getElementById('coldThreshold').value),
+                predictionCount: parseInt(document.getElementById('predictionCount').value),
+                historySize: parseInt(document.getElementById('historySize').value)
+            };
+            
+            // Mettre à jour les poids ML
+            mlState.weights = {...appState.settings.weights};
+            
+            // Sauvegarder dans localStorage
+            localStorage.setItem('rouletteSettings', JSON.stringify(appState.settings));
+            
+            // Fermer le menu
+            closeSettings();
+            
+            // Rafraîchir l'interface
+            refreshInterface();
+        }
+
+        function resetSettings() {
+            // Réinitialiser aux valeurs par défaut
+            appState.settings = {...DEFAULT_SETTINGS};
+            mlState.weights = {...DEFAULT_SETTINGS.weights};
+            
+            // Appliquer le thème par défaut
+            document.body.className = 'theme-' + DEFAULT_SETTINGS.theme;
+            
+            // Sauvegarder dans localStorage
+            localStorage.setItem('rouletteSettings', JSON.stringify(appState.settings));
+            
+            // Fermer le menu
+            closeSettings();
+            
+            // Rafraîchir l'interface
+            refreshInterface();
+        }
+
+        function changeTheme(theme) {
+            appState.settings.theme = theme;
+            document.body.className = 'theme-' + theme;
+            localStorage.setItem('rouletteSettings', JSON.stringify(appState.settings));
+        }
+
+        // Fonctions pour le menu d'information
+        function openInfoMenu() {
+            document.getElementById('infoMenu').classList.add('open');
+            document.getElementById('infoOverlay').classList.add('visible');
+        }
+
+        function closeInfoMenu() {
+            document.getElementById('infoMenu').classList.remove('open');
+            document.getElementById('infoOverlay').classList.remove('visible');
+        }
+
+        // Fonctions pour la modal de don
+        function showDonationModal() {
+            document.getElementById('donationModal').classList.add('open');
+            document.getElementById('donationOverlay').classList.add('visible');
+        }
+
+        function hideDonationModal() {
+            document.getElementById('donationModal').classList.remove('open');
+            document.getElementById('donationOverlay').classList.remove('visible');
+        }
+
+        // Initialisation
+        function init() {
+        	
+            // Boutons numériques
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    addNumber(parseInt(this.textContent));
+                });
+            });
+            
+            // Boutons de contrôle
+            document.getElementById('addBulkButton').addEventListener('click', addBulkNumbers);
+            document.getElementById('undoButton').addEventListener('click', undoLast);
+            document.getElementById('resetButton').addEventListener('click', reset);
+            document.getElementById('toggleHeatmapBtn').addEventListener('click', toggleHeatmap);
+            
+            // Entrée rapide
+            document.getElementById('bulkNumbersInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addBulkNumbers();
+                }
+            });
+            
+            // Gestion des paramètres
+            document.getElementById('settingsToggle').addEventListener('click', openSettings);
+            document.getElementById('closeSettings').addEventListener('click', closeSettings);
+            document.getElementById('settingsOverlay').addEventListener('click', closeSettings);
+            document.getElementById('saveSettings').addEventListener('click', saveSettings);
+            document.getElementById('resetSettings').addEventListener('click', resetSettings);
+            
+            // Gestion du menu d'information
+            document.getElementById('infoToggle').addEventListener('click', openInfoMenu);
+            document.getElementById('closeInfo').addEventListener('click', closeInfoMenu);
+            document.getElementById('infoOverlay').addEventListener('click', closeInfoMenu);
+            
+            // Gestion de la modal de don
+            document.getElementById('continueDonateBtn').addEventListener('click', function() {
+                window.open('https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a', '_blank');
+                hideDonationModal();
+            });
+
+            document.getElementById('resetSessionBtn').addEventListener('click', function() {
+                reset();
+                hideDonationModal();
+            });
+
+            document.getElementById('donationOverlay').addEventListener('click', hideDonationModal);
+            
+            // Sélecteur de thème
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    changeTheme(this.dataset.theme);
+                    document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Mise à jour des valeurs des sliders
+            document.getElementById('tiersWeight').addEventListener('input', function() {
+                document.getElementById('tiersWeightValue').textContent = this.value;
+            });
+            
+            document.getElementById('mdtWeight').addEventListener('input', function() {
+                document.getElementById('mdtWeightValue').textContent = this.value;
+            });
+            
+            document.getElementById('anomaliesWeight').addEventListener('input', function() {
+                document.getElementById('anomaliesWeightValue').textContent = this.value;
+            });
+            
+            // Charger les paramètres sauvegardés
+            if (localStorage.getItem('rouletteSettings')) {
+                try {
+                    const savedSettings = JSON.parse(localStorage.getItem('rouletteSettings'));
+                    appState.settings = {...DEFAULT_SETTINGS, ...savedSettings};
+                    mlState.weights = {...appState.settings.weights};
+                    document.body.className = 'theme-' + appState.settings.theme;
+                } catch (e) {
+                    console.error("Erreur de chargement des paramètres:", e);
+                }
+            }
+
+            refreshInterface();
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
