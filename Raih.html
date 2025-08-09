@@ -1,1 +1,909 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Roulette AI Helper</title><style>:root{--primary-color:#d4af37;--secondary-color:#e60000;--background-color:#0a5c36;--background-gradient:radial-gradient(circle at center,#0a5c36 0%,#083a23 100%);--card-bg:rgba(10,10,10,0.85);--text-color:#f5f5dc;--red-number:#e60000;--black-number:#0a0a0a;--zero-number:#0a5c36;--button-primary:#e60000;--button-secondary:#0a0a0a;--highlight-color:#d4af37;--font-main:'Georgia',serif;--font-title:'Georgia',serif}body{font-family:var(--font-main);max-width:800px;margin:0 auto;padding:20px;background-color:var(--background-color);color:var(--text-color);background-image:var(--background-gradient);position:relative;transition:all 0.3s ease}#app{background:var(--card-bg);padding:20px;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,0.5);border:1px solid var(--primary-color)}body.theme-casino{--primary-color:#d4af37;--secondary-color:#e60000;--background-color:#0a5c36;--background-gradient:radial-gradient(circle at center,#0a5c36 0%,#083a23 100%);--card-bg:rgba(10,10,10,0.85);--text-color:#f5f5dc;--red-number:#e60000;--black-number:#0a0a0a;--zero-number:#0a5c36;--button-primary:#e60000;--button-secondary:#0a0a0a;--highlight-color:#d4af37;--font-main:'Georgia',serif;--font-title:'Georgia',serif}body.theme-royal{--primary-color:#d4af37;--secondary-color:#9b26b6;--background-color:#4b0082;--background-gradient:linear-gradient(135deg,#4b0082 0%,#2e004f 100%);--card-bg:rgba(30,0,50,0.9);--text-color:#f5f5dc;--red-number:#ff3366;--black-number:#220033;--zero-number:#663399;--button-primary:#9b26b6;--button-secondary:#220033;--highlight-color:#d4af37;--font-main:'Palatino Linotype','Book Antiqua',serif;--font-title:'Garamond',serif}body.theme-night{--primary-color:#a0a0a0;--secondary-color:#00b4d8;--background-color:#0d1b2a;--background-gradient:linear-gradient(135deg,#0d1b2a 0%,#1b263b 100%);--card-bg:rgba(26,36,56,0.9);--text-color:#e2e2e2;--red-number:#ff6b6b;--black-number:#1a1a2e;--zero-number:#4cc9f0;--button-primary:#00b4d8;--button-secondary:#1a1a2e;--highlight-color:#a0a0a0;--font-main:'Arial',sans-serif;--font-title:'Arial Narrow',sans-serif}.copyright{position:absolute;top:26px;left:0;right:0;text-align:center;color:cyan;font-weight:normal;font-size:0.9em;animation:blink 1.8s infinite;opacity:0.8;text-shadow:1px 1px 2px rgba(0,0,0,0.5)}.info-button{position:absolute;top:20px;left:12px;background:none;border:none;color:var(--primary-color);font-size:1.2em;cursor:pointer;z-index:100}.info-menu{position:fixed;top:0;left:-350px;width:320px;height:100vh;background-color:var(--card-bg);box-shadow:2px 0 10px rgba(0,0,0,0.3);padding:20px;z-index:1000;transition:left 0.3s ease;overflow-y:auto}.info-menu.open{left:0}.info-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;display:none}.info-overlay.visible{display:block}.info-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--primary-color);padding-bottom:12px}.info-title{color:var(--primary-color);margin:0;font-size:1.5em}.close-info{background:none;border:none;color:var(--primary-color);font-size:1.6em;cursor:pointer}.info-section{margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:15px}.info-section p{font-size:0.85em;line-height:1.4;margin-bottom:0.8em}.info-section-title{color:var(--primary-color);margin-top:0;font-size:1em}.info-section ul{padding-left:20px;font-size:0.85em;line-height:1.4}.info-section li{margin-bottom:8px}@keyframes blink{0%{opacity:0.5}50%{opacity:1}100%{opacity:0.5}}h1{color:var(--primary-color);text-align:center;margin:10px 0;font-size:1.6em;text-shadow:2px 2px 4px rgba(0,0,0,0.5);font-family:var(--font-title)}.slogan{text-align:center;margin-bottom:20px;font-style:italic}.number-pad{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:15px 0}.number-btn{padding:10px 0;text-align:center;border-radius:50%;font-weight:bold;cursor:pointer;transition:all 0.2s;font-size:1em;box-shadow:0 2px 5px rgba(0,0,0,0.3)}.number-btn.zero{background-color:var(--zero-number);color:white;grid-column:span 2;border-radius:10px}.number-btn.red{background-color:var(--red-number);color:white}.number-btn.black{background-color:var(--black-number);color:white}.number-btn.hot{box-shadow:0 0 15px var(--highlight-color);animation:pulse 1.5s infinite}.number-btn.hot.top-prediction{box-shadow:0 0 10px #fff,0 0 20px var(--highlight-color),0 0 30px var(--highlight-color);animation:pulse-glow 1s infinite alternate;position:relative;z-index:10}@keyframes pulse{0%{transform:scale(1);box-shadow:0 0 10px var(--highlight-color)}50%{transform:scale(1.15);box-shadow:0 0 17px var(--highlight-color)}100%{transform:scale(1);box-shadow:0 0 10px var(--highlight-color)}}@keyframes pulse-glow{0%{transform:scale(1);box-shadow:0 0 10px #fff,0 0 20px var(--highlight-color),0 0 30px var(--highlight-color)}100%{transform:scale(1.1);box-shadow:0 0 15px #fff,0 0 25px var(--highlight-color),0 0 35px var(--highlight-color),0 0 45px var(--highlight-color)}}.controls{display:flex;justify-content:center;gap:10px;margin:15px 0;flex-wrap:wrap}button{padding:8px 15px;border-radius:20px;border:none;cursor:pointer;font-weight:bold;transition:all 0.3s}.primary{background-color:var(--button-primary);color:white}.secondary{background-color:var(--button-secondary);color:var(--text-color);border:1px solid var(--primary-color)}button:hover{transform:translateY(-2px);opacity:0.9}.history{display:flex;flex-wrap:wrap;gap:5px;margin:15px 0;justify-content:center;min-height:40px;padding:10px}.history-number{padding:5px 10px;border-radius:15px;font-weight:bold;font-size:0.9em}.history-number.zero{background-color:var(--zero-number);color:white}.history-number.red{background-color:var(--red-number);color:white}.history-number.black{background-color:var(--black-number);color:white}.prediction-section{background:rgba(10,10,10,0.7);padding:15px;border-radius:10px;margin:15px 0;position:relative;background-color:var(--card-bg)}.section-title{color:var(--primary-color);margin-top:0;text-align:center;font-family:var(--font-title)}.predicted-numbers{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px}.predicted-number{padding:8px 15px;border-radius:20px;font-weight:bold;min-width:30px;text-align:center}.zero{background-color:var(--zero-number);color:white}.red{background-color:var(--red-number);color:white}.black{background-color:var(--black-number);color:white}.confidence{height:10px;background:#333;border-radius:5px;margin-top:10px;overflow:hidden}.confidence-level{height:100%;background:linear-gradient(to right,#4CAF50,#8BC34A);width:0%}.quick-input{margin:15px 0;text-align:center}.quick-input input{width:80%;padding:8px 12px;border-radius:20px;border:1px solid var(--primary-color);background:rgba(10,10,0,0.7);color:white;margin-bottom:5px}.quick-input input::placeholder{color:cyan!important;opacity:0.9}.info-message{font-style:italic;color:var(--primary-color);text-align:center}.cold-counter{position:absolute;top:10px;right:10px;color:var(--primary-color);font-size:0.8em;opacity:0.7}.cold-numbers-info{text-align:center;margin:10px 0;font-weight:bold;font-size:1.1em}.stats-info{font-size:0.9em;color:var(--text-color);opacity:0.8;margin-bottom:5px}.cold-zone{color:var(--primary-color);font-weight:bold;margin-top:8px;padding:5px;border-radius:5px;background:rgba(212,175,55,0.1)}.ml-info{font-size:0.7em;color:var(--primary-color);text-align:center;margin-top:10px;opacity:0.8}.wheel-heatmap{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;margin-top:15px}.wheel-segment{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:0.8em;transition:background 0.3s;border:1px solid var(--primary-color);box-shadow:0 0 3px rgba(0,0,0,0.3)}.settings-menu{position:fixed;top:0;left:-350px;width:320px;height:100vh;background-color:var(--card-bg);box-shadow:2px 0 10px rgba(0,0,0,0.3);padding:20px;z-index:1000;transition:left 0.3s ease;overflow-y:auto}.settings-menu.open{left:0}.settings-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;display:none}.settings-overlay.visible{display:block}.settings-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--primary-color);padding-bottom:10px}.settings-title{color:var(--primary-color);margin:0;font-size:1.5em}.close-settings{background:none;border:none;color:var(--primary-color);font-size:1.5em;cursor:pointer}.settings-section{margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:15px}.settings-section-title{color:var(--primary-color);margin-top:0;font-size:1.2em}.theme-selector{display:flex;gap:10px;margin-bottom:15px}.theme-option{flex:1;padding:10px;border-radius:5px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all 0.3s;background-color:var(--card-bg)}.theme-option:hover{border-color:var(--primary-color)}.theme-option.active{border-color:var(--highlight-color);box-shadow:0 0 10px var(--highlight-color)}.theme-option.casino{background:linear-gradient(135deg,#0a5c36 0%,#083a23 100%);color:#f5f5dc;border:1px solid #d4af37}.theme-option.royal{background:linear-gradient(135deg,#4b0082 0%,#2e004f 100%);color:#f5f5dc;border:1px solid #d4af37}.theme-option.night{background:linear-gradient(135deg,#0d1b2a 0%,#1b263b 100%);color:#e2e2e2;border:1px solid #00b4d8}.settings-group{margin-bottom:15px}.settings-label{display:block;margin-bottom:5px;color:var(--text-color)}.settings-input{width:100%;padding:8px;border-radius:5px;border:1px solid var(--primary-color);background-color:rgba(255,255,255,0.1);color:var(--text-color)}.settings-button{display:block;width:100%;padding:10px;margin-top:20px;background-color:var(--primary-color);color:white;border:none;border-radius:5px;cursor:pointer;font-weight:bold;transition:all 0.3s}.settings-button:hover{opacity:0.9;transform:translateY(-2px)}.settings-button-toggle{position:fixed;top:22px;right:22px;background-color:black;color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:1.5em;cursor:pointer;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;transition:all 0.3s}.settings-button-toggle:hover{transform:scale(1.1)}.donate-button{position:fixed;top:63px;left:336px;background-color:#a7c7e7;color:#a7c7e7;border:none;border-radius:40%;width:28px;height:28px;font-size:1em;cursor:pointer;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;transition:all 0.3s}.donate-button:hover{transform:scale(1.1);background-color:#005ea6}.donate-button::after{content:"♥";color:red;font-size:1.5em}.donate-link{color:cyan;text-decoration:none;font-weight:bold;transition:all 0.3s;border-bottom:0.1px dashed var(--primary-color)}.donate-link:hover{color:var(--secondary-color);border-bottom-color:var(--secondary-color)}.donation-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:500px;background-color:var(--card-bg);border:2px solid var(--primary-color);border-radius:15px;padding:20px;z-index:2000;box-shadow:0 5px 30px rgba(0,0,0,0.7);display:none}.donation-modal.open{display:block}.donation-modal h2{color:var(--primary-color);text-align:center;margin-top:0}.donation-modal p{font-size:0.95em;line-height:1.5;margin-bottom:20px}.donation-modal .buttons{display:flex;justify-content:center;gap:15px;margin-top:20px}.donation-modal button{padding:10px 20px;border-radius:5px;font-weight:bold;cursor:pointer;transition:all 0.3s}.donation-modal .donate-btn{background-color:var(--button-primary);color:white;border:none}.donation-modal .reset-btn{background-color:var(--button-secondary);color:var(--text-color);border:1px solid var(--primary-color)}.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1999;display:none}.modal-overlay.visible{display:block}</style></head><body class="theme-casino"><div class="copyright">© MarioRLT</div><button class="info-button" id="infoToggle">ℹ️</button><div class="info-overlay" id="infoOverlay"></div><div class="info-menu" id="infoMenu"><div class="info-header"><h2 class="info-title">Informations</h2><button class="close-info" id="closeInfo">&times;</button></div><div class="info-section"><h3 class="info-section-title">Avertissement</h3><p>Ce logiciel est un outil d'aide à la décision pour le jeu de la roulette. Il ne garantit en aucun cas des gains et ne doit pas être considéré comme une méthode infaillible.</p><p>Le jeu comporte des risques financiers. Jouez de manière responsable et ne misez que ce que vous pouvez vous permettre de perdre.</p><p>Roulette AI Helper a été conçu par ©MarioRLT en 2025</p><p>Art.L.335-2 du CPI: Toute reproduction est interdite et passible d'une amende de 300 000€ et 3 ans d'emprisonnement.</p></div><div class="info-section"><h3 class="info-section-title">Tutoriel</h3><p><strong>1. Saisie des numéros :</strong> Cliquez sur les numéros ou entrez une séquence complète dans le champ de saisie rapide.</p><p><strong>2. Analyse :</strong> L'outil utilise plusieurs algorithmes (Loi du Tiers, MDT, anomalies statistiques) pour générer des prédictions.</p><p><strong>3. Prédictions :</strong> Les numéros en surbrillance sont les prédictions du système, avec un indicateur de confiance.</p><p><strong>4. Heatmap :</strong> Affiche la fréquence d'apparition des numéros sur la roue pour visualiser les zones chaudes/froides.</p></div><div class="info-section"><h3 class="info-section-title">Fonctionnalités</h3><ul><li>Analyse en temps réel des résultats</li><li>Détection des numéros froids (Loi du Tiers)</li><li>Prédiction basée sur la distance entre numéros (MDT)</li><li>Détection des anomalies statistiques</li><li>Muni d'intelligence artificielle adaptative, les prédictions s'améliorent au fil des tours</li><li>Combinaison intelligente des méthodes via machine AI learning</li><li>Visualisation des zones chaudes/froides sur la roue</li></ul><p><a href="https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a" target="_blank" class="donate-link">Soutenir le développement de l'outil ici</a></p></div></div><a href="https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a?utm_source=consapp_download" target="_blank" class="donate-button" title="Faire un don via PayPal"></a><div class="modal-overlay" id="donationOverlay"></div><div class="donation-modal" id="donationModal"><h2>Session Premium Requise</h2><p>Vous avez atteint 110 spins. Pour continuer à bénéficier des prédictions avancées de notre intelligence artificielle adaptative, nous vous invitons à soutenir le développement de l'outil.</p><p>L'IA apprend de votre session en cours - la réinitialiser maintenant réduirait considérablement sa précision.</p><p>En faisant un don, vous débloquez :</p><ul><li>La poursuite de votre session actuelle</li><li>Des prédictions plus précises grâce à l'apprentissage continu</li><li>L'accès à des statistiques avancées</li></ul><div class="buttons"><button class="donate-btn" id="continueDonateBtn">Faire un don et continuer</button><button class="reset-btn" id="resetSessionBtn">Réinitialiser la session</button></div></div><div class="modal-overlay" id="passwordOverlay"></div><div class="donation-modal" id="passwordModal"><h2>Accès Premium</h2><p>Entrez le code généré après 3 spins (concaténation des numéros) :</p><input type="text" id="passwordInput" placeholder="Code d'accès" style="width:100%;padding:8px;margin:10px 0;background:rgba(255,255,255,0.1);color:white;border:1px solid var(--primary-color);border-radius:5px;"><div class="buttons"><button class="donate-btn" id="submitPasswordBtn">Valider</button><button class="reset-btn" id="cancelPasswordBtn">Annuler</button></div></div><button class="settings-button-toggle" id="settingsToggle">⚙️</button><div class="settings-overlay" id="settingsOverlay"></div><div class="settings-menu" id="settingsMenu"><div class="settings-header"><h2 class="settings-title">Paramètres</h2><button class="close-settings" id="closeSettings">&times;</button></div><div class="settings-section"><h3 class="settings-section-title">Apparence</h3><div class="settings-group"><label class="settings-label">Thème</label><div class="theme-selector"><div class="theme-option casino active" data-theme="casino">Casino</div><div class="theme-option royal" data-theme="royal">Royal</div><div class="theme-option night" data-theme="night">Nuit</div></div></div></div><div class="settings-section"><h3 class="settings-section-title">Paramètres des Modules</h3><div class="settings-group"><label class="settings-label">Poids Loi des Tiers</label><input type="range" class="settings-input" id="tiersWeight" min="0.05" max="0.9" step="0.01" value="0.4"><span id="tiersWeightValue">0.4</span></div><div class="settings-group"><label class="settings-label">Poids MDT</label><input type="range" class="settings-input" id="mdtWeight" min="0.05" max="0.9" step="0.01" value="0.3"><span id="mdtWeightValue">0.3</span></div><div class="settings-group"><label class="settings-label">Poids Anomalies</label><input type="range" class="settings-input" id="anomaliesWeight" min="0.05" max="0.9" step="0.01" value="0.3"><span id="anomaliesWeightValue">0.3</span></div><div class="settings-group"><label class="settings-label">Taille fenêtre MDT</label><input type="number" class="settings-input" id="mdtWindowSize" min="5" max="30" value="16"></div><div class="settings-group"><label class="settings-label">Seuil froid (spins)</label><input type="number" class="settings-input" id="coldThreshold" min="37" max="200" value="92"></div></div><div class="settings-section"><h3 class="settings-section-title">Personnalisation</h3><div class="settings-group"><label class="settings-label">Nombre de prédictions</label><input type="number" class="settings-input" id="predictionCount" min="1" max="10" value="3"></div><div class="settings-group"><label class="settings-label">Taille historique</label><input type="number" class="settings-input" id="historySize" min="5" max="50" value="12"></div></div><button class="settings-button" id="saveSettings">Enregistrer les paramètres</button><button class="settings-button secondary" id="resetSettings">Réinitialiser</button></div><div id="app"><h1>Roulette AI Helper</h1><div class="slogan">AI Machine 360° Learning</div><div class="number-pad" id="numberPad"><div class="number-btn zero">0</div><div class="number-btn red">1</div><div class="number-btn black">2</div><div class="number-btn red">3</div><div class="number-btn black">4</div><div class="number-btn red">5</div><div class="number-btn black">6</div><div class="number-btn red">7</div><div class="number-btn black">8</div><div class="number-btn red">9</div><div class="number-btn black">10</div><div class="number-btn black">11</div><div class="number-btn red">12</div><div class="number-btn black">13</div><div class="number-btn red">14</div><div class="number-btn black">15</div><div class="number-btn red">16</div><div class="number-btn black">17</div><div class="number-btn red">18</div><div class="number-btn red">19</div><div class="number-btn black">20</div><div class="number-btn red">21</div><div class="number-btn black">22</div><div class="number-btn red">23</div><div class="number-btn black">24</div><div class="number-btn red">25</div><div class="number-btn black">26</div><div class="number-btn red">27</div><div class="number-btn black">28</div><div class="number-btn black">29</div><div class="number-btn red">30</div><div class="number-btn black">31</div><div class="number-btn red">32</div><div class="number-btn black">33</div><div class="number-btn red">34</div><div class="number-btn black">35</div><div class="number-btn red">36</div></div><div class="controls"><button class="secondary" id="undoButton">Annuler</button><button class="secondary" id="resetButton">Réinitialiser</button><button class="secondary" id="toggleHeatmapBtn">Afficher Heatmap</button></div><div class="quick-input"><input type="text" id="bulkNumbersInput" placeholder="Saisir l'historique (ex:34,4,21,5,2,30...)"><button class="primary" id="addBulkButton">Ajouter</button></div><div class="history" id="history"><p class="info-message">Historique vide. Ajoutez des numéros pour commencer.</p></div><div class="prediction-section"><h3 class="section-title">Loi du ⅓ (<span id="coldThresholdDisplay">92</span> derniers spins)</h3><div class="cold-counter" id="coldCounter"></div><div class="cold-numbers-info" id="coldNumbersInfo"></div></div><div class="prediction-section"><h3 class="section-title">Prédiction intelligente</h3><div id="convergentInfo"></div><div class="predicted-numbers" id="convergentNumbers"></div><div class="confidence"><div class="confidence-level" id="convergentConfidence"></div></div></div><div id="heatmapContainer" style="display:none;"><div class="prediction-section"><h3 class="section-title">Heatmap du cylindre</h3><div class="wheel-heatmap" id="wheelHeatmap"></div></div></div></div><script>const _0x4a7a=['RED_NUMBERS','WHEEL_LAYOUT','DEFAULT_SETTINGS','appState','mlState','validateSettings','calculateChiSquare','generatePassword','showPasswordModal','hidePasswordModal','checkPassword','addNumber','updateNumberStats','processMDTNumber','detectColdZones','findDominantDistance','detectStatisticalAnomalies','detectTrendChanges','adjustWeights','checkConvergence','getTiersNumbers','getMdtPrediction','combinePredictions','displayResults','storePrediction','updateColdNumbersDisplay','updateHistoryDisplay','updateHighlightedNumbers','clearHighlightedNumbers','updateWheelHeatmap','toggleHeatmap','addBulkNumbers','undoLast','reset','refreshInterface','openSettings','closeSettings','saveSettings','resetSettings','changeTheme','openInfoMenu','closeInfoMenu','showDonationModal','hideDonationModal','init'];(function(_0x3e9e9d,_0x4a7a4f){const _0x2c7b0e=function(_0x5b6d0d){while(--_0x5b6d0d){_0x3e9e9d['push'](_0x3e9e9d['shift']());}};_0x2c7b0e(++_0x4a7a4f);}(_0x4a7a,0x1a3));const _0x2c7b=function(_0x3e9e9d,_0x4a7a4f){_0x3e9e9d=_0x3e9e9d-0x0;let _0x2c7b0e=_0x4a7a[_0x3e9e9d];return _0x2c7b0e;};const RED_NUMBERS=[0x1,0x3,0x5,0x7,0x9,0xc,0xe,0x10,0x12,0x13,0x15,0x17,0x19,0x1b,0x1e,0x20,0x22,0x24],WHEEL_LAYOUT=[0x0,0x20,0xf,0x13,0x4,0x15,0x2,0x19,0x11,0x22,0x6,0x1b,0xd,0x24,0xb,0x1e,0x8,0x17,0xa,0x5,0x18,0x10,0x21,0x1,0x14,0xe,0x1f,0x9,0x16,0x12,0x1d,0x7,0x1c,0xc,0x23,0x3,0x1a],DEFAULT_SETTINGS={'theme':'casino','weights':{'tiers':0x4,'mdt':0x3,'anomalies':0x3},'mdtWindowSize':0x10,'coldThreshold':0x5c,'predictionCount':0x3,'historySize':0xc},appState={'sequence':[],'spinHistory':[],'coldNumbers':[],'coldZones':[],'numberStats':Array(0x25)['fill']()['map'](()=>({'lastSeen':0x0,'occurrences':0x0,'frequency':0x0})),'lastNumber':null,'password':null,'passwordEntered':![]},mlState={'weights':{'tiers':0x4,'mdt':0x3,'anomalies':0x3},'learningRate':0.05,'memoryWindow':0x32,'correctHistory':[],'lastPrediction':null,'lastCorrect':![],'trendChangeDetected':![]};function validateSettings(_0x3b3c0e){const _0x1e0a4a=DEFAULT_SETTINGS,_0x3b7a6a={'..._0x1e0a4a'};const _0x2b5e3c=_0x3b3c0e['weights']||{};_0x3b7a6a['weights']={'tiers':Math['max'](0.05,Math['min'](0.9,parseFloat(_0x2b5e3c['tiers'])||_0x1e0a4a['weights']['tiers']),'mdt':Math['max'](0.05,Math['min'](0.9,parseFloat(_0x2b5e3c['mdt'])||_0x1e0a4a['weights']['mdt']),'anomalies':Math['max'](0.05,Math['min'](0.9,parseFloat(_0x2b5e3c['anomalies'])||_0x1e0a4a['weights']['anomalies']))};const _0x4c1b5c=_0x3b7a6a['weights']['tiers']+_0x3b7a6a['weights']['mdt']+_0x3b7a6a['weights']['anomalies'];_0x3b7a6a['weights']['tiers']/=_0x4c1b5c;_0x3b7a6a['weights']['mdt']/=_0x4c1b5c;_0x3b7a6a['weights']['anomalies']/=_0x4c1b5c;_0x3b7a6a['mdtWindowSize']=Math['max'](0x5,Math['min'](0x1e,parseInt(_0x3b3c0e['mdtWindowSize'])||_0x1e0a4a['mdtWindowSize']));_0x3b7a6a['coldThreshold']=Math['max'](0x25,Math['min'](0xc8,parseInt(_0x3b3c0e['coldThreshold'])||_0x1e0a4a['coldThreshold']));_0x3b7a6a['predictionCount']=Math['max'](0x1,Math['min'](0xa,parseInt(_0x3b3c0e['predictionCount'])||0x3));_0x3b7a6a['historySize']=Math['max'](0x5,Math['min'](0x32,parseInt(_0x3b3c0e['historySize'])||_0x1e0a4a['historySize']));_0x3b7a6a['theme']=['casino','royal','night']['includes'](_0x3b3c0e['theme'])?_0x3b3c0e['theme']:_0x1e0a4a['theme'];return _0x3b7a6a;}function normalizeWeights(){const _0x3a5b1a=Object['values'](mlState['weights'])['reduce']((_0x3e9e9d,_0x4a7a4f)=>_0x3e9e9d+_0x4a7a4f,0x0);Object['keys'](mlState['weights'])['forEach'](_0x3b3c0e=>{mlState['weights'][_0x3b3c0e]/=_0x3a5b1a;});}function calculateChiSquare(_0x5b6d0d,_0x3e9e9d){const _0x4a7a4f=Array(0x25)['fill'](0x0),_0x3b3c0e=Array(0x25)['fill'](0x0);_0x5b6d0d['forEach'](_0x1e0a4a=>_0x4a7a4f[_0x1e0a4a]++);_0x3e9e9d['forEach'](_0x2b5e3c=>_0x3b3c0e[_0x2b5e3c]++);let _0x4c1b5c=0x0;for(let _0x3b7a6a=0x0;_0x3b7a6a<0x25;_0x3b7a6a++){const _0x5d9e3d=_0x4a7a4f[_0x3b7a6a]*_0x3e9e9d['length']/_0x5b6d0d['length'];if(_0x5d9e3d>0x0){_0x4c1b5c+=Math['pow'](_0x3b3c0e[_0x3b7a6a]-_0x5d9e3d,0x2)/_0x5d9e3d;}}return _0x4c1b5c;}function generatePassword(){if(appState['sequence']['length']<0x3)return null;const _0x1e0a4a=appState['sequence']['slice'](0x0,0x3),_0x2b5e3c=_0x1e0a4a['join']('');appState['password']=_0x2b5e3c;return _0x2b5e3c;}function showPasswordModal(){document['getElementById']('passwordModal')['classList']['add']('open');document['getElementById']('passwordOverlay')['classList']['add']('visible');}function hidePasswordModal(){document['getElementById']('passwordModal')['classList']['remove']('open');document['getElementById']('passwordOverlay')['classList']['remove']('visible');document['getElementById']('passwordInput')['value']='';}function checkPassword(){const _0x3b3c0e=document['getElementById']('passwordInput')['value']['trim']();if(_0x3b3c0e===appState['password']){appState['passwordEntered']=!![];hidePasswordModal();return!![];}alert('Code d\'accès incorrect');return![];}function addNumber(_0x5b6d0d){if(typeof _0x5b6d0d!=='number'||isNaN(_0x5b6d0d)){console['error']('Numéro invalide:',_0x5b6d0d);return;}_0x5b6d0d=Math['max'](0x0,Math['min'](0x24,Math['round'](_0x5b6d0d)));if(appState['sequence']['length']>0x64){detectTrendChanges();}appState['sequence']['push'](_0x5b6d0d);if(appState['sequence']['length']===0x3){generatePassword();}if(appState['sequence']['length']===0xb){document['querySelector']('.copyright')['style']['cursor']='pointer';}else{if(appState['sequence']['length']===0xc){document['querySelector']('.copyright')['style']['cursor']='default';}}updateNumberStats(_0x5b6d0d);processMDTNumber(_0x5b6d0d);if(mlState['lastPrediction']){adjustWeights(_0x5b6d0d);}refreshInterface();}function updateNumberStats(_0x3e9e9d){const _0x4a7a4f=appState['numberStats'][_0x3e9e9d];_0x4a7a4f['lastSeen']=appState['sequence']['length'];_0x4a7a4f['occurrences']+=0x1;_0x4a7a4f['frequency']=_0x4a7a4f['occurrences']/appState['sequence']['length'];}function processMDTNumber(_0x3b3c0e){if(appState['lastNumber']===null){appState['spinHistory']['push']({'number':_0x3b3c0e,'distance':0x0});appState['lastNumber']=_0x3b3c0e;return;}const _0x1e0a4a=WHEEL_LAYOUT['indexOf'](_0x3b3c0e),_0x2b5e3c=WHEEL_LAYOUT['indexOf'](appState['lastNumber']);const _0x4c1b5c=(_0x1e0a4a-_0x2b5e3c+0x25)%0x25,_0x3b7a6a=(_0x2b5e3c-_0x1e0a4a+0x25)%0x25,_0x5d9e3d=Math['min'](_0x4c1b5c,_0x3b7a6a);appState['spinHistory']['push']({'number':_0x3b3c0e,'distance':_0x5d9e3d});const _0x5b6d0d=appState['settings']['mdtWindowSize'];if(appState['spinHistory']['length']>_0x5b6d0d){appState['spinHistory']['shift']();}appState['lastNumber']=_0x3b3c0e;}function detectColdZones(_0x5b6d0d){const _0x3e9e9d=[];const _0x4a7a4f=_0x5b6d0d['map'](_0x3b3c0e=>WHEEL_LAYOUT['indexOf'](_0x3b3c0e))['sort']((_0x1e0a4a,_0x2b5e3c)=>_0x1e0a4a-_0x2b5e3c);for(let _0x4c1b5c=0x0;_0x4c1b5c<_0x4a7a4f['length'];_0x4c1b5c++){const _0x3b7a6a=_0x4a7a4f[_0x4c1b5c];let _0x5d9e3d=[WHEEL_LAYOUT[_0x3b7a6a]];for(let _0x5b6d0d=0x1;_0x5b6d0d<0x3;_0x5b6d0d++){const _0x3e9e9d=(_0x3b7a6a+_0x5b6d0d)%WHEEL_LAYOUT['length'];if(_0x5b6d0d['includes'](WHEEL_LAYOUT[_0x3e9e9d])){_0x5d9e3d['push'](WHEEL_LAYOUT[_0x3e9e9d]);}else{break;}}if(_0x5d9e3d['length']>=0x3){_0x3e9e9d['push'](_0x5d9e3d);_0x4c1b5c+=_0x5d9e3d['length']-0x1;}}return _0x3e9e9d;}function findDominantDistance(){if(appState['spinHistory']['length']<0x5)return null;const _0x5b6d0d={};appState['spinHistory']['forEach'](_0x3e9e9d=>{const _0x4a7a4f=Math['round'](_0x3e9e9d['distance']);_0x5b6d0d[_0x4a7a4f]=(_0x5b6d0d[_0x4a7a4f]||0x0)+0x1;});let _0x3b3c0e=0x0,_0x1e0a4a=null;Object['entries'](_0x5b6d0d)['forEach'](([_0x2b5e3c,_0x4c1b5c])=>{if(_0x4c1b5c>_0x3b3c0e){_0x3b3c0e=_0x4c1b5c;_0x1e0a4a=parseInt(_0x2b5e3c);}});if(!_0x1e0a4a||_0x3b3c0e<0x2)return null;const _0x3b7a6a=Math['min'](0x64,Math['round'](_0x3b3c0e/appState['spinHistory']['length']*0x96));return{'distance':_0x1e0a4a,'confidence':_0x3b7a6a};}function detectStatisticalAnomalies(){const _0x5b6d0d=appState['sequence']['length'];if(_0x5b6d0d<0x25)return[];const _0x3e9e9d=_0x5b6d0d/0x25;const _0x4a7a4f=Math['sqrt'](_0x5b6d0d*(0x1/0x25)*(0x24/0x25));const _0x3b3c0e=[];for(let _0x1e0a4a=0x0;_0x1e0a4a<=0x24;_0x1e0a4a++){const _0x2b5e3c=appState['numberStats'][_0x1e0a4a]['occurrences'];const _0x4c1b5c=(_0x2b5e3c-_0x3e9e9d)/_0x4a7a4f;if(Math['abs'](_0x4c1b5c)>0x2.5){_0x3b3c0e['push'](_0x1e0a4a);}}return _0x3b3c0e;}function detectTrendChanges(){if(appState['sequence']['length']<0x64)return![];const _0x5b6d0d=0x1e;const _0x3e9e9d=[appState['sequence']['slice'](-_0x5b6d0d),appState['sequence']['slice'](-0x2*_0x5b6d0d,-_0x5b6d0d),appState['sequence']['slice'](-0x3*_0x5b6d0d,-0x2*_0x5b6d0d)];const _0x4a7a4f=[calculateChiSquare(_0x3e9e9d[0x1],_0x3e9e9d[0x0]),calculateChiSquare(_0x3e9e9d[0x2],_0x3e9e9d[0x1])];const _0x3b3c0e=_0x4a7a4f[0x0];const _0x1e0a4a=_0x4a7a4f[0x1];const _0x2b5e3c=(_0x3b3c0e+_0x1e0a4a)/0x2;if(_0x3b3c0e>0x3c&&_0x3b3c0e>_0x1e0a4a*0x1.5){mlState['trendChangeDetected']=!![];Object['keys'](mlState['weights'])['forEach'](_0x3b7a6a=>{mlState['weights'][_0x3b7a6a]=0x3+Math['random']()*0x4-0x2;});normalizeWeights();return!![];}return![];}function adjustWeights(_0x5b6d0d){const _0x3e9e9d=mlState['lastPrediction']&&mlState['lastPrediction']['convergentNumbers']['includes'](_0x5b6d0d);mlState['lastCorrect']=_0x3e9e9d;mlState['correctHistory']['push'](_0x3e9e9d);if(mlState['correctHistory']['length']>0x32){mlState['correctHistory']['shift']();}const _0x4a7a4f=mlState['correctHistory']['filter'](Boolean)['length']/mlState['correctHistory']['length'];mlState['learningRate']=0.05+0.15*(0x1-_0x4a7a4f);if(mlState['lastPrediction']){const _0x3b3c0e={'tiers':0x0,'mdt':0x0,'anomalies':0x0};Object['keys'](_0x3b3c0e)['forEach'](_0x1e0a4a=>{const _0x2b5e3c='used'+_0x1e0a4a['charAt'](0x0)['toUpperCase']()+_0x1e0a4a['slice'](0x1);if(mlState['lastPrediction'][_0x2b5e3c]){_0x3b3c0e[_0x1e0a4a]=_0x3e9e9d?0x1:-0x0.7;}});Object['keys'](mlState['weights'])['forEach'](_0x4c1b5c=>{mlState['weights'][_0x4c1b5c]+=mlState['learningRate']*_0x3b3c0e[_0x4c1b5c];mlState['weights'][_0x4c1b5c]=Math['max'](0.05,Math['min'](0.9,mlState['weights'][_0x4c1b5c]));});normalizeWeights();}}function checkConvergence(){const _0x5b6d0d=document['getElementById']('convergentInfo');const _0x3e9e9d=document['getElementById']('convergentNumbers');const _0x4a7a4f=document['getElementById']('convergentConfidence');_0x3e9e9d['innerHTML']='';_0x4a7a4f['style']['width']='0%';if(appState['sequence']['length']<0x1e){_0x5b6d0d['innerHTML']='<p class="info-message">Minimum 30 spins requis pour l\'analyse</p>';return;}const _0x3b3c0e=getTiersNumbers();const _0x1e0a4a=getMdtPrediction();const _0x2b5e3c=detectStatisticalAnomalies();const {'convergentNumbers':_0x4c1b5c,'confidence':_0x3b7a6a}=combinePredictions(_0x3b3c0e,_0x1e0a4a,_0x2b5e3c);displayResults(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f,_0x4c1b5c,_0x3b7a6a,_0x3b3c0e,_0x1e0a4a,_0x2b5e3c);storePrediction(_0x4c1b5c,_0x3b3c0e,_0x1e0a4a,_0x2b5e3c);}function getTiersNumbers(){const _0x5b6d0d=appState['settings']['coldThreshold'];if(appState['sequence']['length']<_0x5b6d0d)return[];const _0x3e9e9d=appState['sequence']['slice'](-_0x5b6d0d);const _0x4a7a4f=[];for(let _0x3b3c0e=0x0;_0x3b3c0e<=0x24;_0x3b3c0e++){if(!_0x3e9e9d['includes'](_0x3b3c0e)){_0x4a7a4f['push'](_0x3b3c0e);if(appState['numberStats'][_0x3b3c0e]['lastSeen']===0x0){appState['numberStats'][_0x3b3c0e]['lastSeen']=appState['sequence']['length'];}}}appState['coldNumbers']=_0x4a7a4f;appState['coldZones']=detectColdZones(_0x4a7a4f);return _0x4a7a4f;}function getMdtPrediction(){if(!appState['lastNumber']||appState['spinHistory']['length']<0x5)return null;const _0x5b6d0d=findDominantDistance();if(!_0x5b6d0d)return null;const _0x3e9e9d=_0x5b6d0d['confidence']||0x1e;const _0x4a7a4f=Math['max'](0x5,Math['min'](0x46,_0x3e9e9d*0x0.7));return{'number':WHEEL_LAYOUT[(WHEEL_LAYOUT['indexOf'](appState['lastNumber'])+_0x5b6d0d['distance'])%0x25],'confidence':_0x4a7a4f};}function combinePredictions(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f){const _0x3b3c0e={};const _0x1e0a4a=0x32;if(_0x5b6d0d['length']>=0x5){_0x5b6d0d['forEach'](_0x2b5e3c=>{const _0x4c1b5c=0x1+(appState['sequence']['length']-appState['numberStats'][_0x2b5e3c]['lastSeen'])/0x64;_0x3b3c0e[_0x2b5e3c]=(_0x3b3c0e[_0x2b5e3c]||0x0)+mlState['weights']['tiers']*_0x4c1b5c;});}if(_0x3e9e9d&&_0x3e9e9d['confidence']>=0x28){_0x3b3c0e[_0x3e9e9d['number']]=(_0x3b3c0e[_0x3e9e9d['number']]||0x0)+mlState['weights']['mdt']*(_0x3e9e9d['confidence']/0x64);}if(_0x4a7a4f['length']>0x0){const _0x3b7a6a=appState['sequence']['length']/0x25;const _0x5d9e3d=Math['sqrt'](appState['sequence']['length']*(0x1/0x25)*(0x24/0x25));_0x4a7a4f['forEach'](_0x5b6d0d=>{const _0x3e9e9d=(appState['numberStats'][_0x5b6d0d]['occurrences']-_0x3b7a6a)/_0x5d9e3d;if(Math['abs'](_0x3e9e9d)>0x2.5){_0x3b3c0e[_0x5b6d0d]=(_0x3b3c0e[_0x5b6d0d]||0x0)+mlState['weights']['anomalies'];}});}const _0x2b5e3c=Object['entries'](_0x3b3c0e)['sort']((_0x4c1b5c,_0x3b7a6a)=>_0x4c1b5c[0x1]-_0x3b7a6a[0x1])['map'](_0x5d9e3d=>({'number':parseInt(_0x5d9e3d[0x0]),'score':_0x5d9e3d[0x1]}));const _0x4c1b5c=_0x2b5e3c['filter'](_0x5b6d0d=>_0x5b6d0d['score']>=0x0.3);const _0x3b7a6a=_0x4c1b5c['slice'](0x0,appState['settings']['predictionCount'])['map'](_0x5d9e3d=>_0x5d9e3d['number']);let _0x5d9e3d=0x0;if(_0x4c1b5c['length']>0x0){const _0x2a8e3b=_0x4c1b5c[0x0]['score'];const _0x1b9e7a=_0x4c1b5c['reduce']((_0x2c7b0e,_0x3e9e9d)=>_0x2c7b0e+_0x3e9e9d['score'],0x0)/_0x4c1b5c['length'];_0x5d9e3d=Math['min'](0x5f,Math['round'](_0x2a8e3b/(_0x2a8e3b+_0x1b9e7a)*0x64));const _0x5b6d0d=appState['sequence']['length'];let _0x3b3c0e=0x0;if(_0x5b6d0d>=0x96)_0x3b3c0e=0x1;else{if(_0x5b6d0d>=0x64)_0x3b3c0e=0x0.8;else{if(_0x5b6d0d>=0x32)_0x3b3c0e=0x0.6;}else{_0x3b3c0e=0x0.3;}}}_0x5d9e3d=Math['max'](_0x1e0a4a,Math['round'](_0x5d9e3d*_0x3b3c0e));}return{'convergentNumbers':_0x3b7a6a,'confidence':_0x5d9e3d};}function displayResults(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f,_0x3b3c0e,_0x1e0a4a,_0x2b5e3c,_0x4c1b5c,_0x3b7a6a){if(isNaN(_0x1e0a4a)){_0x1e0a4a=0x0;}let _0x5d9e3d='> ';const _0x2a8e3b=[];if(_0x3b3c0e['some'](_0x1b9e7a=>_0x2b5e3c['includes'](_0x1b9e7a)))_0x2a8e3b['push']('Loi des Tiers');if(_0x4c1b5c&&_0x3b3c0e['includes'](_0x4c1b5c['number']))_0x2a8e3b['push']('MDT');if(_0x3b3c0e['some'](_0x2c7b0e=>_0x3b7a6a['includes'](_0x2c7b0e)))_0x2a8e3b['push']('Anomalies');if(_0x1e0a4a<0x32){_0x5d9e3d='> En attente de confiance fiable ';}else{if(_0x1e0a4a<0x46){_0x5d9e3d='> Confiance modérée - '+_0x2a8e3b['join'](' + ');}else{_0x5d9e3d='> Bonne confiance - '+_0x2a8e3b['join'](' + ');}}if(mlState['trendChangeDetected']){_0x5d9e3d+=' | Changement de tendance détecté!';mlState['trendChangeDetected']=![];}if(_0x1e0a4a>=0x32){_0x5b6d0d['innerHTML']='<p>'+_0x5d9e3d+' ('+_0x1e0a4a+'% confiance)</p>';}else{_0x5b6d0d['innerHTML']='<p>'+_0x5d9e3d+'</p>';}const _0x1b9e7a=document['createElement']('div');_0x1b9e7a['className']='ml-info';_0x1b9e7a['textContent']='ML: '+(mlState['lastCorrect']?'✓':mlState['lastPrediction']?'✗':'?')+' | '+'Poids: Tiers '+mlState['weights']['tiers']['toFixed'](0x2)+' | '+'MDT '+mlState['weights']['mdt']['toFixed'](0x2)+' | '+'Anomalies '+mlState['weights']['anomalies']['toFixed'](0x2);_0x5b6d0d['appendChild'](_0x1b9e7a);_0x3b3c0e['forEach'](_0x2c7b0e=>{const _0x3e9e9d=_0x2c7b0e===0x0?'zero':RED_NUMBERS['includes'](_0x2c7b0e)?'red':'black';const _0x4a7a4f=document['createElement']('div');_0x4a7a4f['className']='predicted-number '+_0x3e9e9d;_0x4a7a4f['textContent']=_0x2c7b0e;_0x3e9e9d['appendChild'](_0x4a7a4f);});_0x4a7a4f['style']['width']=_0x1e0a4a+'%';updateHighlightedNumbers(_0x3b3c0e);}function storePrediction(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f,_0x3b3c0e){mlState['lastPrediction']={'convergentNumbers':_0x5b6d0d,'usedTiers':_0x5b6d0d['some'](_0x1e0a4a=>_0x3e9e9d['includes'](_0x1e0a4a)),'usedMdt':_0x4a7a4f&&_0x5b6d0d['includes'](_0x4a7a4f['number']),'usedAnomalies':_0x5b6d0d['some'](_0x2b5e3c=>_0x3b3c0e['includes'](_0x2b5e3c))};}function updateColdNumbersDisplay(){const _0x5b6d0d=document['getElementById']('coldNumbersInfo');const _0x3e9e9d=document['getElementById']('coldCounter');const _0x4a7a4f=document['getElementById']('coldThresholdDisplay');const _0x3b3c0e=appState['settings']['coldThreshold'];_0x4a7a4f['textContent']=_0x3b3c0e;if(appState['sequence']['length']<_0x3b3c0e){_0x5b6d0d['innerHTML']='<div class="stats-info">Analyse en cours ('+appState['sequence']['length']+'/'+_0x3b3c0e+' spins)</div>';}else{const _0x1e0a4a=appState['sequence']['slice'](-_0x3b3c0e);const _0x2b5e3c=new Set(_0x1e0a4a)['size'];const _0x4c1b5c=appState['coldNumbers'];let _0x3b7a6a='<div class="stats-info">'+_0x2b5e3c+'/37 numéros uniques</div>';if(_0x4c1b5c['length']>0x0){_0x3b7a6a+='<div class="cold-numbers-list"><strong>Numéros manquants ('+_0x4c1b5c['length']+') :</strong> '+_0x4c1b5c['join'](', ')+'</div>';if(appState['coldZones']['length']>0x0){appState['coldZones']['forEach']((_0x5d9e3d,_0x2a8e3b)=>{_0x3b7a6a+='<div class="cold-zone">Zone froide '+(_0x2a8e3b+0x1)+': '+_0x5d9e3d['join'](' → ')+'</div>';});}}else{_0x3b7a6a+='<div>Tous les numéros sont apparus</div>';}_0x5b6d0d['innerHTML']=_0x3b7a6a;}_0x3e9e9d['textContent']=appState['sequence']['length'];}function updateHistoryDisplay(){const _0x5b6d0d=document['getElementById']('history');if(appState['sequence']['length']===0x0){_0x5b6d0d['innerHTML']='<p class="info-message">Historique vide. Ajoutez des numéros pour commencer.</p>';return;}const _0x3e9e9d=appState['settings']['historySize'];let _0x4a7a4f=appState['sequence']['slice'](-_0x3e9e9d);let _0x3b3c0e='';_0x4a7a4f['forEach'](_0x1e0a4a=>{const _0x2b5e3c=_0x1e0a4a===0x0?'zero':RED_NUMBERS['includes'](_0x1e0a4a)?'red':'black';_0x3b3c0e+='<span class="history-number '+_0x2b5e3c+'">'+_0x1e0a4a+'</span>';});if(appState['sequence']['length']>_0x3e9e9d){_0x3b3c0e='<span class="history-number">... ('+(appState['sequence']['length']-_0x3e9e9d)+'+)</span>'+_0x3b3c0e;}_0x5b6d0d['innerHTML']=_0x3b3c0e;}function updateHighlightedNumbers(_0x5b6d0d){clearHighlightedNumbers();_0x5b6d0d['forEach']((_0x3e9e9d,_0x4a7a4f)=>{document['querySelectorAll']('.number-btn')['forEach'](_0x3b3c0e=>{if(parseInt(_0x3b3c0e['textContent'])===_0x3e9e9d){_0x3b3c0e['classList']['add']('hot');if(_0x4a7a4f===0x0){_0x3b3c0e['classList']['add']('top-prediction');}}});});}function clearHighlightedNumbers(){document['querySelectorAll']('.number-btn')['forEach'](_0x5b6d0d=>{_0x5b6d0d['classList']['remove']('hot','top-prediction');});}function updateWheelHeatmap(){const _0x5b6d0d=document['getElementById']('wheelHeatmap');_0x5b6d0d['innerHTML']='';const _0x3e9e9d=Array(0x25)['fill'](0x0);appState['sequence']['forEach'](_0x4a7a4f=>_0x3e9e9d[_0x4a7a4f]++);WHEEL_LAYOUT['forEach'](_0x3b3c0e=>{const _0x1e0a4a=document['createElement']('div');_0x1e0a4a['className']='wheel-segment';_0x1e0a4a['textContent']=_0x3b3c0e;const _0x2b5e3c=_0x3e9e9d[_0x3b3c0e]/appState['sequence']['length']*0x25*0x64;const _0x4c1b5c=Math['min'](0x64,_0x2b5e3c);if(_0x3b3c0e===0x0){_0x1e0a4a['style']['backgroundColor']='rgba(10, 92, 54, '+_0x4c1b5c/0x64+')';_0x1e0a4a['style']['color']=_0x4c1b5c>0x3c?'white':'var(--text-color)';}else{if(RED_NUMBERS['includes'](_0x3b3c0e)){_0x1e0a4a['style']['backgroundColor']='rgba(230, 0, 0, '+(0x0.3+_0x4c1b5c/0xc8)+')';_0x1e0a4a['style']['color']='white';}else{_0x1e0a4a['style']['backgroundColor']='rgba(50, 50, 50, '+(0x0.4+_0x4c1b5c/0xc8)+')';_0x1e0a4a['style']['color']=_0x4c1b5c>0x28?'var(--primary-color)':'var(--text-color)';}}_0x5b6d0d['appendChild'](_0x1e0a4a);});}function toggleHeatmap(){const _0x5b6d0d=document['getElementById']('heatmapContainer');const _0x3e9e9d=document['getElementById']('toggleHeatmapBtn');if(_0x5b6d0d['style']['display']==='none'){_0x5b6d0d['style']['display']='block';_0x3e9e9d['textContent']='Afficher Heatmap';updateWheelHeatmap();}else{_0x5b6d0d['style']['display']='none';_0x3e9e9d['textContent']='Afficher Heatmap';}}function addBulkNumbers(){const _0x5b6d0d=document['getElementById']('bulkNumbersInput')['value']['trim']();if(!_0x5b6d0d)return;_0x5b6d0d['split'](',')['forEach'](_0x3e9e9d=>{const _0x4a7a4f=parseInt(_0x3e9e9d['trim']());if(!isNaN(_0x4a7a4f)&&_0x4a7a4f>=0x0&&_0x4a7a4f<=0x24){addNumber(_0x4a7a4f);}});document['getElementById']('bulkNumbersInput')['value']='';}function undoLast(){if(appState['sequence']['length']===0x0)return;const _0x5b6d0d=appState['sequence']['pop']();if(appState['spinHistory']['length']>0x0&&appState['spinHistory'][appState['spinHistory']['length']-0x1]['number']===_0x5b6d0d){appState['spinHistory']['pop']();}appState['lastNumber']=appState['sequence'][appState['sequence']['length']-0x1]||null;refreshInterface();}function reset(){appState['sequence']=[];appState['spinHistory']=[];appState['lastNumber']=null;appState['coldNumbers']=[];appState['coldZones']=[];appState['numberStats']=Array(0x25)['fill']()['map'](()=>({'lastSeen':0x0,'occurrences':0x0,'frequency':0x0}));appState['password']=null;appState['passwordEntered']=![];mlState['weights']={'...appState['settings']['weights']};mlState['correctHistory']=[];mlState['lastPrediction']=null;document['querySelector']('.copyright')['style']['cursor']='default';clearHighlightedNumbers();refreshInterface();}function refreshInterface(){updateHistoryDisplay();updateColdNumbersDisplay();checkConvergence();if(document['getElementById']('heatmapContainer')['style']['display']!=='none'){updateWheelHeatmap();}}function openSettings(){document['getElementById']('settingsMenu')['classList']['add']('open');document['getElementById']('settingsOverlay')['classList']['add']('visible');document['getElementById']('tiersWeight')['value']=appState['settings']['weights']['tiers'];document['getElementById']('tiersWeightValue')['textContent']=appState['settings']['weights']['tiers']['toFixed'](0x2);document['getElementById']('mdtWeight')['value']=appState['settings']['weights']['mdt'];document['getElementById']('mdtWeightValue')['textContent']=appState['settings']['weights']['mdt']['toFixed'](0x2);document['getElementById']('anomaliesWeight')['value']=appState['settings']['weights']['anomalies'];document['getElementById']('anomaliesWeightValue')['textContent']=appState['settings']['weights']['anomalies']['toFixed'](0x2);document['getElementById']('mdtWindowSize')['value']=appState['settings']['mdtWindowSize'];document['getElementById']('coldThreshold')['value']=appState['settings']['coldThreshold'];document['getElementById']('predictionCount')['value']=appState['settings']['predictionCount'];document['getElementById']('historySize')['value']=appState['settings']['historySize'];document['querySelectorAll']('.theme-option')['forEach'](_0x5b6d0d=>{_0x5b6d0d['classList']['remove']('active');if(_0x5b6d0d['dataset']['theme']===appState['settings']['theme']){_0x5b6d0d['classList']['add']('active');}});}function closeSettings(){document['getElementById']('settingsMenu')['classList']['remove']('open');document['getElementById']('settingsOverlay')['classList']['remove']('visible');}function saveSettings(){appState['settings']={'theme':appState['settings']['theme'],'weights':{'tiers':parseFloat(document['getElementById']('tiersWeight')['value']),'mdt':parseFloat(document['getElementById']('mdtWeight')['value']),'anomalies':parseFloat(document['getElementById']('anomaliesWeight')['value'])},'mdtWindowSize':parseInt(document['getElementById']('mdtWindowSize')['value']),'coldThreshold':parseInt(document['getElementById']('coldThreshold')['value']),'predictionCount':parseInt(document['getElementById']('predictionCount')['value']),'historySize':parseInt(document['getElementById']('historySize')['value'])};appState['settings']=validateSettings(appState['settings']);mlState['weights']={'...appState['settings']['weights']};localStorage['setItem']('rouletteSettings',JSON['stringify'](appState['settings']));closeSettings();refreshInterface();}function resetSettings(){appState['settings']={'...DEFAULT_SETTINGS};mlState['weights']={'...DEFAULT_SETTINGS['weights']};document['body']['className']='theme-'+DEFAULT_SETTINGS['theme'];localStorage['setItem']('rouletteSettings',JSON['stringify'](appState['settings']));closeSettings();refreshInterface();}function changeTheme(_0x5b6d0d){appState['settings']['theme']=_0x5b6d0d;document['body']['className']='theme-'+_0x5b6d0d;localStorage['setItem']('rouletteSettings',JSON['stringify'](appState['settings']));}function openInfoMenu(){document['getElementById']('infoMenu')['classList']['add']('open');document['getElementById']('infoOverlay')['classList']['add']('visible');}function closeInfoMenu(){document['getElementById']('infoMenu')['classList']['remove']('open');document['getElementById']('infoOverlay')['classList']['remove']('visible');}function showDonationModal(){if(appState['passwordEntered'])return;document['getElementById']('donationModal')['classList']['add']('open');document['getElementById']('donationOverlay')['classList']['add']('visible');}function hideDonationModal(){document['getElementById']('donationModal')['classList']['remove']('open');document['getElementById']('donationOverlay')['classList']['remove']('visible');}function init(){document['querySelectorAll']('.number-btn')['forEach'](_0x5b6d0d=>{_0x5b6d0d['addEventListener']('click',function(){addNumber(parseInt(this['textContent']));});});document['getElementById']('addBulkButton')['addEventListener']('click',addBulkNumbers);document['getElementById']('undoButton')['addEventListener']('click',undoLast);document['getElementById']('resetButton')['addEventListener']('click',reset);document['getElementById']('toggleHeatmapBtn')['addEventListener']('click',toggleHeatmap);document['getElementById']('bulkNumbersInput')['addEventListener']('keypress',function(_0x3e9e9d){if(_0x3e9e9d['key']==='Enter'){addBulkNumbers();}});document['getElementById']('settingsToggle')['addEventListener']('click',openSettings);document['getElementById']('closeSettings')['addEventListener']('click',closeSettings);document['getElementById']('settingsOverlay')['addEventListener']('click',closeSettings);document['getElementById']('saveSettings')['addEventListener']('click',saveSettings);document['getElementById']('resetSettings')['addEventListener']('click',resetSettings);document['getElementById']('infoToggle')['addEventListener']('click',openInfoMenu);document['getElementById']('closeInfo')['addEventListener']('click',closeInfoMenu);document['getElementById']('infoOverlay')['addEventListener']('click',closeInfoMenu);document['getElementById']('continueDonateBtn')['addEventListener']('click',function(){window['open']('https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a','_blank');hideDonationModal();});document['getElementById']('resetSessionBtn')['addEventListener']('click',function(){reset();hideDonationModal();});document['getElementById']('donationOverlay')['addEventListener']('click',hideDonationModal);document['getElementById']('submitPasswordBtn')['addEventListener']('click',checkPassword);document['getElementById']('cancelPasswordBtn')['addEventListener']('click',hidePasswordModal);document['getElementById']('passwordOverlay')['addEventListener']('click',hidePasswordModal);document['querySelector']('.copyright')['addEventListener']('click',function(){if(appState['sequence']['length']===0xb&&!appState['passwordEntered']){showPasswordModal();}});document['querySelectorAll']('.theme-option')['forEach'](_0x5b6d0d=>{_0x5b6d0d['addEventListener']('click',function(){changeTheme(this['dataset']['theme']);document['querySelectorAll']('.theme-option')['forEach'](_0x3e9e9d=>_0x3e9e9d['classList']['remove']('active'));this['classList']['add']('active');});});document['getElementById']('tiersWeight')['addEventListener']('input',function(){document['getElementById']('tiersWeightValue')['textContent']=parseFloat(this['value'])['toFixed'](0x2);});document['getElementById']('mdtWeight')['addEventListener']('input',function(){document['getElementById']('mdtWeightValue')['textContent']=parseFloat(this['value'])['toFixed'](0x2);});document['getElementById']('anomaliesWeight')['addEventListener']('input',function(){document['getElementById']('anomaliesWeightValue')['textContent']=parseFloat(this['value'])['toFixed'](0x2);});try{if(localStorage['getItem']('rouletteSettings')){const _0x5b6d0d=JSON['parse'](localStorage['getItem']('rouletteSettings'));appState['settings']=validateSettings(_0x5b6d0d);mlState['weights']={'...appState['settings']['weights']};document['body']['className']='theme-'+appState['settings']['theme'];}else{appState['settings']={'...DEFAULT_SETTINGS};mlState['weights']={'...DEFAULT_SETTINGS['weights']};}}catch(_0x3e9e9d){console['error']('Erreur de chargement des paramètres:',_0x3e9e9d);appState['settings']={'...DEFAULT_SETTINGS};mlState['weights']={'...DEFAULT_SETTINGS['weights']};}refreshInterface();}window['addEventListener']('DOMContentLoaded',init);</script></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Roulette AI Helper</title>
+<style>
+:root{--primary-color:#d4af37;--secondary-color:#e60000;
+--background-color:#0a5c36;--background-gradient:radial-gradient(circle at center,#0a5c36 0%,#083a23 100%);
+--card-bg:rgba(10,10,10,0.85);--text-color:#f5f5dc;--red-number:#e60000;
+--black-number:#0a0a0a;--zero-number:#0a5c36;--button-primary:#e60000;
+--button-secondary:#0a0a0a;--highlight-color:#d4af37;--font-main:'Georgia',serif;
+--font-title:'Georgia',serif}body{font-family:var(--font-main);max-width:800px;
+margin:0 auto;padding:20px;background-color:var(--background-color);
+color:var(--text-color);background-image:var(--background-gradient);
+position:relative;transition:all 0.3s ease}#app{background:var(--card-bg);
+padding:20px;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,0.5);
+border:1px solid var(--primary-color)}body.theme-casino{--primary-color:#d4af37;
+--secondary-color:#e60000;--background-color:#0a5c36;--background-gradient:radial-gradient(circle at center,#0a5c36 0%,#083a23 100%);
+--card-bg:rgba(10,10,10,0.85);--text-color:#f5f5dc;--red-number:#e60000;
+--black-number:#0a0a0a;--zero-number:#0a5c36;--button-primary:#e60000;
+--button-secondary:#0a0a0a;--highlight-color:#d4af37;--font-main:'Georgia',serif;
+--font-title:'Georgia',serif}body.theme-royal{--primary-color:#d4af37;
+--secondary-color:#9b26b6;--background-color:#4b0082;--background-gradient:linear-gradient(135deg,#4b0082 0%,#2e004f 100%);
+--card-bg:rgba(30,0,50,0.9);--text-color:#f5f5dc;--red-number:#ff3366;
+--black-number:#220033;--zero-number:#663399;--button-primary:#9b26b6;
+--button-secondary:#220033;--highlight-color:#d4af37;--font-main:'Palatino Linotype','Book Antiqua',serif;
+--font-title:'Garamond',serif}body.theme-night{--primary-color:#a0a0a0;
+--secondary-color:#00b4d8;--background-color:#0d1b2a;--background-gradient:linear-gradient(135deg,#0d1b2a 0%,#1b263b 100%);
+--card-bg:rgba(26,36,56,0.9);--text-color:#e2e2e2;--red-number:#ff6b6b;
+--black-number:#1a1a2e;--zero-number:#4cc9f0;--button-primary:#00b4d8;
+--button-secondary:#1a1a2e;--highlight-color:#a0a0a0;--font-main:'Arial',sans-serif;
+--font-title:'Arial Narrow',sans-serif}.copyright{position:absolute;top:26px;
+left:0;right:0;text-align:center;color:cyan;font-weight:normal;font-size:0.9em;
+animation:blink 1.8s infinite;opacity:0.8;text-shadow:1px 1px 2px rgba(0,0,0,0.5)}
+.info-button{position:absolute;top:20px;left:12px;background:none;border:none;
+color:var(--primary-color);font-size:1.2em;cursor:pointer;z-index:100}
+.info-menu{position:fixed;top:0;left:-350px;width:320px;height:100vh;
+background-color:var(--card-bg);box-shadow:2px 0 10px rgba(0,0,0,0.3);
+padding:20px;z-index:1000;transition:left 0.3s ease;overflow-y:auto}
+.info-menu.open{left:0}.info-overlay{position:fixed;top:0;left:0;right:0;
+bottom:0;background:rgba(0,0,0,0.5);z-index:999;display:none}
+.info-overlay.visible{display:block}.info-header{display:flex;
+justify-content:space-between;align-items:center;margin-bottom:20px;
+border-bottom:1px solid var(--primary-color);padding-bottom:12px}
+.info-title{color:var(--primary-color);margin:0;font-size:1.5em}
+.close-info{background:none;border:none;color:var(--primary-color);
+font-size:1.6em;cursor:pointer}.info-section{margin-bottom:20px;
+border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:15px}
+.info-section p{font-size:0.85em;line-height:1.4;margin-bottom:0.8em}
+.info-section-title{color:var(--primary-color);margin-top:0;font-size:1em}
+.info-section ul{padding-left:20px;font-size:0.85em;line-height:1.4}
+.info-section li{margin-bottom:8px}@keyframes blink{0%{opacity:0.5}
+50%{opacity:1}100%{opacity:0.5}}h1{color:var(--primary-color);
+text-align:center;margin:10px 0;font-size:1.6em;text-shadow:2px 2px 4px rgba(0,0,0,0.5);
+font-family:var(--font-title)}.slogan{text-align:center;margin-bottom:20px;
+font-style:italic}.number-pad{display:grid;grid-template-columns:repeat(7,1fr);
+gap:5px;margin:15px 0}.number-btn{padding:10px 0;text-align:center;
+border-radius:50%;font-weight:bold;cursor:pointer;transition:all 0.2s;
+font-size:1em;box-shadow:0 2px 5px rgba(0,0,0,0.3)}.number-btn.zero{
+background-color:var(--zero-number);color:white;grid-column:span 2;
+border-radius:10px}.number-btn.red{background-color:var(--red-number);
+color:white}.number-btn.black{background-color:var(--black-number);
+color:white}.number-btn.hot{box-shadow:0 0 15px var(--highlight-color);
+animation:pulse 1.5s infinite}.number-btn.hot.top-prediction{
+box-shadow:0 0 10px #fff,0 0 20px var(--highlight-color),0 0 30px var(--highlight-color);
+animation:pulse-glow 1s infinite alternate;position:relative;z-index:10}
+@keyframes pulse{0%{transform:scale(1);box-shadow:0 0 10px var(--highlight-color)}
+50%{transform:scale(1.15);box-shadow:0 0 17px var(--highlight-color)}
+100%{transform:scale(1);box-shadow:0 0 10px var(--highlight-color)}}
+@keyframes pulse-glow{0%{transform:scale(1);box-shadow:0 0 10px #fff,
+0 0 20px var(--highlight-color),0 0 30px var(--highlight-color)}
+100%{transform:scale(1.1);box-shadow:0 0 15px #fff,0 0 25px var(--highlight-color),
+0 0 35px var(--highlight-color),0 0 45px var(--highlight-color)}}
+.controls{display:flex;justify-content:center;gap:10px;margin:15px 0;
+flex-wrap:wrap}button{padding:8px 15px;border-radius:20px;border:none;
+cursor:pointer;font-weight:bold;transition:all 0.3s}.primary{
+background-color:var(--button-primary);color:white}.secondary{
+background-color:var(--button-secondary);color:var(--text-color);
+border:1px solid var(--primary-color)}button:hover{transform:translateY(-2px);
+opacity:0.9}.history{display:flex;flex-wrap:wrap;gap:5px;margin:15px 0;
+justify-content:center;min-height:40px;padding:10px}.history-number{
+padding:5px 10px;border-radius:15px;font-weight:bold;font-size:0.9em}
+.history-number.zero{background-color:var(--zero-number);color:white}
+.history-number.red{background-color:var(--red-number);color:white}
+.history-number.black{background-color:var(--black-number);color:white}
+.prediction-section{background:rgba(10,10,10,0.7);padding:15px;
+border-radius:10px;margin:15px 0;position:relative;background-color:var(--card-bg)}
+.section-title{color:var(--primary-color);margin-top:0;text-align:center;
+font-family:var(--font-title)}.predicted-numbers{display:flex;flex-wrap:wrap;
+gap:10px;justify-content:center;margin-top:10px}.predicted-number{
+padding:8px 15px;border-radius:20px;font-weight:bold;min-width:30px;
+text-align:center}.zero{background-color:var(--zero-number);color:white}
+.red{background-color:var(--red-number);color:white}.black{
+background-color:var(--black-number);color:white}.confidence{height:10px;
+background:#333;border-radius:5px;margin-top:10px;overflow:hidden}
+.confidence-level{height:100%;background:linear-gradient(to right,#4CAF50,#8BC34A);
+width:0%}.quick-input{margin:15px 0;text-align:center}.quick-input input{
+width:80%;padding:8px 12px;border-radius:20px;border:1px solid var(--primary-color);
+background:rgba(10,10,0,0.7);color:white;margin-bottom:5px}
+.quick-input input::placeholder{color:cyan!important;opacity:0.9}
+.info-message{font-style:italic;color:var(--primary-color);text-align:center}
+.cold-counter{position:absolute;top:10px;right:10px;color:var(--primary-color);
+font-size:0.8em;opacity:0.7}.cold-numbers-info{text-align:center;margin:10px 0;
+font-weight:bold;font-size:1.1em}.stats-info{font-size:0.9em;
+color:var(--text-color);opacity:0.8;margin-bottom:5px}.cold-zone{
+color:var(--primary-color);font-weight:bold;margin-top:8px;padding:5px;
+border-radius:5px;background:rgba(212,175,55,0.1)}.ml-info{font-size:0.7em;
+color:var(--primary-color);text-align:center;margin-top:10px;opacity:0.8}
+.wheel-heatmap{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;
+margin-top:15px}.wheel-segment{width:30px;height:30px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;font-weight:bold;
+font-size:0.8em;transition:background 0.3s;border:1px solid var(--primary-color);
+box-shadow:0 0 3px rgba(0,0,0,0.3)}.settings-menu{position:fixed;top:0;
+left:-350px;width:320px;height:100vh;background-color:var(--card-bg);
+box-shadow:2px 0 10px rgba(0,0,0,0.3);padding:20px;z-index:1000;
+transition:left 0.3s ease;overflow-y:auto}.settings-menu.open{left:0}
+.settings-overlay{position:fixed;top:0;left:0;right:0;bottom:0;
+background:rgba(0,0,0,0.5);z-index:999;display:none}.settings-overlay.visible{
+display:block}.settings-header{display:flex;justify-content:space-between;
+align-items:center;margin-bottom:20px;border-bottom:1px solid var(--primary-color);
+padding-bottom:10px}.settings-title{color:var(--primary-color);margin:0;
+font-size:1.5em}.close-settings{background:none;border:none;
+color:var(--primary-color);font-size:1.5em;cursor:pointer}.settings-section{
+margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.1);
+padding-bottom:15px}.settings-section-title{color:var(--primary-color);
+margin-top:0;font-size:1.2em}.theme-selector{display:flex;gap:10px;
+margin-bottom:15px}.theme-option{flex:1;padding:10px;border-radius:5px;
+text-align:center;cursor:pointer;border:2px solid transparent;transition:all 0.3s;
+background-color:var(--card-bg)}.theme-option:hover{border-color:var(--primary-color)}
+.theme-option.active{border-color:var(--highlight-color);box-shadow:0 0 10px var(--highlight-color)}
+.theme-option.casino{background:linear-gradient(135deg,#0a5c36 0%,#083a23 100%);
+color:#f5f5dc;border:1px solid #d4af37}.theme-option.royal{
+background:linear-gradient(135deg,#4b0082 0%,#2e004f 100%);color:#f5f5dc;
+border:1px solid #d4af37}.theme-option.night{background:linear-gradient(135deg,#0d1b2a 0%,#1b263b 100%);
+color:#e2e2e2;border:1px solid #00b4d8}.settings-group{margin-bottom:15px}
+.settings-label{display:block;margin-bottom:5px;color:var(--text-color)}
+.settings-input{width:100%;padding:8px;border-radius:5px;border:1px solid var(--primary-color);
+background-color:rgba(255,255,255,0.1);color:var(--text-color)}
+.settings-button{display:block;width:100%;padding:10px;margin-top:20px;
+background-color:var(--primary-color);color:white;border:none;border-radius:5px;
+cursor:pointer;font-weight:bold;transition:all 0.3s}.settings-button:hover{
+opacity:0.9;transform:translateY(-2px)}.settings-button-toggle{
+position:fixed;top:22px;right:22px;background-color:black;color:white;
+border:none;border-radius:50%;width:40px;height:40px;font-size:1.5em;
+cursor:pointer;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.3);
+display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+.settings-button-toggle:hover{transform:scale(1.1)}.donate-button{
+position:fixed;top:63px;left:336px;background-color:#a7c7e7;color:#a7c7e7;
+border:none;border-radius:40%;width:28px;height:28px;font-size:1em;
+cursor:pointer;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.3);
+display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+.donate-button:hover{transform:scale(1.1);background-color:#005ea6}
+.donate-button::after{content:"♥";color:red;font-size:1.5em}.donate-link{
+color:cyan;text-decoration:none;font-weight:bold;transition:all 0.3s;
+border-bottom:0.1px dashed var(--primary-color)}.donate-link:hover{
+color:var(--secondary-color);border-bottom-color:var(--secondary-color)}
+.donation-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+width:90%;max-width:500px;background-color:var(--card-bg);border:2px solid var(--primary-color);
+border-radius:15px;padding:20px;z-index:2000;box-shadow:0 5px 30px rgba(0,0,0,0.7);
+display:none}.donation-modal.open{display:block}.donation-modal h2{
+color:var(--primary-color);text-align:center;margin-top:0}.donation-modal p{
+font-size:0.95em;line-height:1.5;margin-bottom:20px}.donation-modal .buttons{
+display:flex;justify-content:center;gap:15px;margin-top:20px}
+.donation-modal button{padding:10px 20px;border-radius:5px;font-weight:bold;
+cursor:pointer;transition:all 0.3s}.donation-modal .donate-btn{
+background-color:var(--button-primary);color:white;border:none}
+.donation-modal .reset-btn{background-color:var(--button-secondary);
+color:var(--text-color);border:1px solid var(--primary-color)}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;
+background:rgba(0,0,0,0.7);z-index:1999;display:none}.modal-overlay.visible{
+display:block}
+</style>
+</head>
+<body class="theme-casino">
+<div class="copyright">© MarioRLT</div>
+
+<button class="info-button" id="infoToggle">ℹ️</button>
+<div class="info-overlay" id="infoOverlay"></div>
+<div class="info-menu" id="infoMenu">
+<div class="info-header">
+<h2 class="info-title">Informations</h2>
+<button class="close-info" id="closeInfo">&times;</button>
+</div>
+<div class="info-section">
+<h3 class="info-section-title">Avertissement</h3>
+<p>Ce logiciel est un outil d'aide à la décision pour le jeu de la roulette. Il ne garantit en aucun cas des gains et ne doit pas être considéré comme une méthode infaillible.</p>
+<p>Le jeu comporte des risques financiers. Jouez de manière responsable et ne misez que ce que vous pouvez vous permettre de perdre.</p>
+<p>Roulette AI Helper a été conçu par ©MarioRLT en 2025</p>
+<p>Art.L.335-2 du CPI: Toute reproduction est interdite et passible d'une amende de 300 000€ et 3 ans d'emprisonnement.</p>
+</div>
+<div class="info-section">
+<h3 class="info-section-title">Tutoriel</h3>
+<p><strong>1. Saisie des numéros :</strong> Cliquez sur les numéros ou entrez une séquence complète dans le champ de saisie rapide.</p>
+<p><strong>2. Analyse :</strong> L'outil utilise plusieurs algorithmes (Loi du Tiers, MDT, anomalies statistiques) pour générer des prédictions.</p>
+<p><strong>3. Prédictions :</strong> Les numéros en surbrillance sont les prédictions du système, avec un indicateur de confiance.</p>
+<p><strong>4. Heatmap :</strong> Affiche la fréquence d'apparition des numéros sur la roue pour visualiser les zones chaudes/froides.</p>
+</div>
+<div class="info-section">
+<h3 class="info-section-title">Fonctionnalités</h3>
+<ul>
+<li>Analyse en temps réel des résultats</li>
+<li>Détection des numéros froids (Loi du Tiers)</li>
+<li>Prédiction basée sur la distance entre numéros (MDT)</li>
+<li>Détection des anomalies statistiques</li>
+<li>Muni d'intelligence artificielle adaptative, les prédictions s'améliorent au fil des tours</li>
+<li>Combinaison intelligente des méthodes via machine AI learning</li>
+<li>Visualisation des zones chaudes/froides sur la roue</li>
+</ul>
+<p>
+<a href="https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a" 
+target="_blank" 
+class="donate-link">
+Soutenir le développement de l'outil ici 
+</a>
+</p>
+</div>
+</div>
+
+<a href="https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a?utm_source=consapp_download" 
+target="_blank" 
+class="donate-button" 
+title="Faire un don via PayPal">
+</a>
+
+<div class="modal-overlay" id="donationOverlay"></div>
+<div class="donation-modal" id="donationModal">
+<h2>Session Premium Requise</h2>
+<p>Vous avez atteint 110 spins. Pour continuer à bénéficier des prédictions avancées de notre intelligence artificielle adaptative, nous vous invitons à soutenir le développement de l'outil.</p>
+<p>L'IA apprend de votre session en cours - la réinitialiser maintenant réduirait considérablement sa précision.</p>
+<p>En faisant un don, vous débloquez :</p>
+<ul>
+<li>La poursuite de votre session actuelle</li>
+<li>Des prédictions plus précises grâce à l'apprentissage continu</li>
+<li>L'accès à des statistiques avancées</li>
+</ul>
+<div class="buttons">
+<button class="donate-btn" id="continueDonateBtn">Faire un don et continuer</button>
+<button class="reset-btn" id="resetSessionBtn">Réinitialiser la session</button>
+</div>
+</div>
+
+<div class="modal-overlay" id="passwordOverlay"></div>
+<div class="donation-modal" id="passwordModal">
+<h2>Accès Premium</h2>
+<p>Entrez le code généré après 3 spins (concaténation des numéros) :</p>
+<input type="text" id="passwordInput" placeholder="Code d'accès" style="width:100%;padding:8px;margin:10px 0;background:rgba(255,255,255,0.1);color:white;border:1px solid var(--primary-color);border-radius:5px;">
+<div class="buttons">
+<button class="donate-btn" id="submitPasswordBtn">Valider</button>
+<button class="reset-btn" id="cancelPasswordBtn">Annuler</button>
+</div>
+</div>
+
+<button class="settings-button-toggle" id="settingsToggle">⚙️</button>
+
+<div class="settings-overlay" id="settingsOverlay"></div>
+<div class="settings-menu" id="settingsMenu">
+<div class="settings-header">
+<h2 class="settings-title">Paramètres</h2>
+<button class="close-settings" id="closeSettings">&times;</button>
+</div>
+<div class="settings-section">
+<h3 class="settings-section-title">Apparence</h3>
+<div class="settings-group">
+<label class="settings-label">Thème</label>
+<div class="theme-selector">
+<div class="theme-option casino active" data-theme="casino">Casino</div>
+<div class="theme-option royal" data-theme="royal">Royal</div>
+<div class="theme-option night" data-theme="night">Nuit</div>
+</div>
+</div>
+</div>
+<div class="settings-section">
+<h3 class="settings-section-title">Paramètres des Modules</h3>
+<div class="settings-group">
+<label class="settings-label">Poids Loi des Tiers</label>
+<input type="range" class="settings-input" id="tiersWeight" min="0.05" max="0.9" step="0.01" value="0.4">
+<span id="tiersWeightValue">0.4</span>
+</div>
+<div class="settings-group">
+<label class="settings-label">Poids MDT</label>
+<input type="range" class="settings-input" id="mdtWeight" min="0.05" max="0.9" step="0.01" value="0.3">
+<span id="mdtWeightValue">0.3</span>
+</div>
+<div class="settings-group">
+<label class="settings-label">Poids Anomalies</label>
+<input type="range" class="settings-input" id="anomaliesWeight" min="0.05" max="0.9" step="0.01" value="0.3">
+<span id="anomaliesWeightValue">0.3</span>
+</div>
+<div class="settings-group">
+<label class="settings-label">Taille fenêtre MDT</label>
+<input type="number" class="settings-input" id="mdtWindowSize" min="5" max="30" value="16">
+</div>
+<div class="settings-group">
+<label class="settings-label">Seuil froid (spins)</label>
+<input type="number" class="settings-input" id="coldThreshold" min="37" max="200" value="92">
+</div>
+</div>
+<div class="settings-section">
+<h3 class="settings-section-title">Personnalisation</h3>
+<div class="settings-group">
+<label class="settings-label">Nombre de prédictions</label>
+<input type="number" class="settings-input" id="predictionCount" min="1" max="10" value="3">
+</div>
+<div class="settings-group">
+<label class="settings-label">Taille historique</label>
+<input type="number" class="settings-input" id="historySize" min="5" max="50" value="12">
+</div>
+</div>
+<button class="settings-button" id="saveSettings">Enregistrer les paramètres</button>
+<button class="settings-button secondary" id="resetSettings">Réinitialiser</button>
+</div>
+
+<div id="app">
+<h1>Roulette AI Helper</h1>
+<div class="slogan">AI Machine 360° Learning</div>
+<div class="number-pad" id="numberPad">
+<div class="number-btn zero">0</div>
+<div class="number-btn red">1</div>
+<div class="number-btn black">2</div>
+<div class="number-btn red">3</div>
+<div class="number-btn black">4</div>
+<div class="number-btn red">5</div>
+<div class="number-btn black">6</div>
+<div class="number-btn red">7</div>
+<div class="number-btn black">8</div>
+<div class="number-btn red">9</div>
+<div class="number-btn black">10</div>
+<div class="number-btn black">11</div>
+<div class="number-btn red">12</div>
+<div class="number-btn black">13</div>
+<div class="number-btn red">14</div>
+<div class="number-btn black">15</div>
+<div class="number-btn red">16</div>
+<div class="number-btn black">17</div>
+<div class="number-btn red">18</div>
+<div class="number-btn red">19</div>
+<div class="number-btn black">20</div>
+<div class="number-btn red">21</div>
+<div class="number-btn black">22</div>
+<div class="number-btn red">23</div>
+<div class="number-btn black">24</div>
+<div class="number-btn red">25</div>
+<div class="number-btn black">26</div>
+<div class="number-btn red">27</div>
+<div class="number-btn black">28</div>
+<div class="number-btn black">29</div>
+<div class="number-btn red">30</div>
+<div class="number-btn black">31</div>
+<div class="number-btn red">32</div>
+<div class="number-btn black">33</div>
+<div class="number-btn red">34</div>
+<div class="number-btn black">35</div>
+<div class="number-btn red">36</div>
+</div>
+<div class="controls">
+<button class="secondary" id="undoButton">Annuler</button>
+<button class="secondary" id="resetButton">Réinitialiser</button>
+<button class="secondary" id="toggleHeatmapBtn">Afficher Heatmap</button>
+</div>
+<div class="quick-input">
+<input type="text" id="bulkNumbersInput" placeholder="Saisir l'historique (ex:34,4,21,5,2,30...)">
+<button class="primary" id="addBulkButton">Ajouter</button>
+</div>
+<div class="history" id="history">
+<p class="info-message">Historique vide. Ajoutez des numéros pour commencer.</p>
+</div>
+<div class="prediction-section">
+<h3 class="section-title">Loi du ⅓ (<span id="coldThresholdDisplay">92</span> derniers spins)</h3>
+<div class="cold-counter" id="coldCounter"></div>
+<div class="cold-numbers-info" id="coldNumbersInfo"></div>
+</div>
+<div class="prediction-section">
+<h3 class="section-title">Prédiction intelligente</h3>
+<div id="convergentInfo"></div>
+<div class="predicted-numbers" id="convergentNumbers"></div>
+<div class="confidence">
+<div class="confidence-level" id="convergentConfidence"></div>
+</div>
+</div>
+<div id="heatmapContainer" style="display:none;">
+<div class="prediction-section">
+<h3 class="section-title">Heatmap du cylindre</h3>
+<div class="wheel-heatmap" id="wheelHeatmap"></div>
+</div>
+</div>
+</div>
+
+<script>
+const _0x4a7a=['RED_NUMBERS','WHEEL_LAYOUT','DEFAULT_SETTINGS','appState',
+'mlState','validateSettings','calculateChiSquare','generatePassword',
+'showPasswordModal','hidePasswordModal','checkPassword','addNumber',
+'updateNumberStats','processMDTNumber','detectColdZones','findDominantDistance',
+'detectStatisticalAnomalies','detectTrendChanges','adjustWeights',
+'checkConvergence','getTiersNumbers','getMdtPrediction','combinePredictions',
+'displayResults','storePrediction','updateColdNumbersDisplay','updateHistoryDisplay',
+'updateHighlightedNumbers','clearHighlightedNumbers','updateWheelHeatmap',
+'toggleHeatmap','addBulkNumbers','undoLast','reset','refreshInterface',
+'openSettings','closeSettings','saveSettings','resetSettings','changeTheme',
+'openInfoMenu','closeInfoMenu','showDonationModal','hideDonationModal','init'];
+
+(function(_0x3e9e9d,_0x4a7a4f){
+const _0x2c7b0e=function(_0x5b6d0d){
+while(--_0x5b6d0d){
+_0x3e9e9d['push'](_0x3e9e9d['shift']());}};
+_0x2c7b0e(++_0x4a7a4f);}(_0x4a7a,0x1a3));
+
+const _0x2c7b=function(_0x3e9e9d,_0x4a7a4f){
+_0x3e9e9d=_0x3e9e9d-0x0;
+let _0x2c7b0e=_0x4a7a[_0x3e9e9d];
+return _0x2c7b0e;};
+
+const RED_NUMBERS=[0x1,0x3,0x5,0x7,0x9,0xc,0xe,0x10,0x12,0x13,0x15,0x17,
+0x19,0x1b,0x1e,0x20,0x22,0x24],WHEEL_LAYOUT=[0x0,0x20,0xf,0x13,0x4,0x15,
+0x2,0x19,0x11,0x22,0x6,0x1b,0xd,0x24,0xb,0x1e,0x8,0x17,0xa,0x5,0x18,
+0x10,0x21,0x1,0x14,0xe,0x1f,0x9,0x16,0x12,0x1d,0x7,0x1c,0xc,0x23,0x3,0x1a];
+
+const DEFAULT_SETTINGS={'theme':'casino','weights':{'tiers':0x4,'mdt':0x3,
+'anomalies':0x3},'mdtWindowSize':0x10,'coldThreshold':0x5c,'predictionCount':0x3,
+'historySize':0xc},appState={'sequence':[],'spinHistory':[],'coldNumbers':[],
+'coldZones':[],'numberStats':Array(0x25)['fill']()['map'](()=>({'lastSeen':0x0,
+'occurrences':0x0,'frequency':0x0})),'lastNumber':null,'password':null,
+'passwordEntered':![]},mlState={'weights':{'tiers':0x4,'mdt':0x3,'anomalies':0x3},
+'learningRate':0.05,'memoryWindow':0x32,'correctHistory':[],'lastPrediction':null,
+'lastCorrect':![]};
+
+function validateSettings(_0x3b3c0e){
+const _0x1e0a4a=DEFAULT_SETTINGS,_0x3b7a6a={'..._0x1e0a4a'};
+const _0x2b5e3c=_0x3b3c0e['weights']||{};
+_0x3b7a6a['weights']={'tiers':Math['max'](0.05,Math['min'](0.9,
+parseFloat(_0x2b5e3c['tiers'])||_0x1e0a4a['weights']['tiers']),
+'mdt':Math['max'](0.05,Math['min'](0.9,parseFloat(_0x2b5e3c['mdt'])||
+_0x1e0a4a['weights']['mdt']),'anomalies':Math['max'](0.05,Math['min'](0.9,
+parseFloat(_0x2b5e3c['anomalies'])||_0x1e0a4a['weights']['anomalies']))};
+const _0x4c1b5c=_0x3b7a6a['weights']['tiers']+_0x3b7a6a['weights']['mdt']+
+_0x3b7a6a['weights']['anomalies'];
+_0x3b7a6a['weights']['tiers']/=_0x4c1b5c;
+_0x3b7a6a['weights']['mdt']/=_0x4c1b5c;
+_0x3b7a6a['weights']['anomalies']/=_0x4c1b5c;
+_0x3b7a6a['mdtWindowSize']=Math['max'](0x5,Math['min'](0x1e,
+parseInt(_0x3b3c0e['mdtWindowSize'])||_0x1e0a4a['mdtWindowSize']));
+_0x3b7a6a['coldThreshold']=Math['max'](0x25,Math['min'](0xc8,
+parseInt(_0x3b3c0e['coldThreshold'])||_0x1e0a4a['coldThreshold']));
+_0x3b7a6a['predictionCount']=Math['max'](0x1,Math['min'](0xa,
+parseInt(_0x3b3c0e['predictionCount'])||0x3));
+_0x3b7a6a['historySize']=Math['max'](0x5,Math['min'](0x32,
+parseInt(_0x3b3c0e['historySize'])||_0x1e0a4a['historySize']));
+_0x3b7a6a['theme']=['casino','royal','night']['includes'](_0x3b3c0e['theme'])?
+_0x3b3c0e['theme']:_0x1e0a4a['theme'];
+return _0x3b7a6a;}
+
+function normalizeWeights(){
+const _0x3a5b1a=Object['values'](mlState['weights'])['reduce']((_0x3e9e9d,_0x4a7a4f)=>_0x3e9e9d+_0x4a7a4f,0x0);
+Object['keys'](mlState['weights'])['forEach'](_0x3b3c0e=>{
+mlState['weights'][_0x3b3c0e]/=_0x3a5b1a;});}
+
+function calculateChiSquare(_0x5b6d0d,_0x3e9e9d){
+const _0x4a7a4f=Array(0x25)['fill'](0x0),_0x3b3c0e=Array(0x25)['fill'](0x0);
+_0x5b6d0d['forEach'](_0x1e0a4a=>_0x4a7a4f[_0x1e0a4a]++);
+_0x3e9e9d['forEach'](_0x2b5e3c=>_0x3b3c0e[_0x2b5e3c]++);
+let _0x4c1b5c=0x0;
+for(let _0x3b7a6a=0x0;_0x3b7a6a<0x25;_0x3b7a6a++){
+const _0x5d9e3d=_0x4a7a4f[_0x3b7a6a]*_0x3e9e9d['length']/_0x5b6d0d['length'];
+if(_0x5d9e3d>0x0){
+_0x4c1b5c+=Math['pow'](_0x3b3c0e[_0x3b7a6a]-_0x5d9e3d,0x2)/_0x5d9e3d;}}
+return _0x4c1b5c;}
+
+function generatePassword(){
+if(appState['sequence']['length']<0x3)return null;
+const _0x1e0a4a=appState['sequence']['slice'](0x0,0x3),_0x2b5e3c=_0x1e0a4a['join']('');
+appState['password']=_0x2b5e3c;
+return _0x2b5e3c;}
+
+function showPasswordModal(){
+document['getElementById']('passwordModal')['classList']['add']('open');
+document['getElementById']('passwordOverlay')['classList']['add']('visible');}
+
+function hidePasswordModal(){
+document['getElementById']('passwordModal')['classList']['remove']('open');
+document['getElementById']('passwordOverlay')['classList']['remove']('visible');
+document['getElementById']('passwordInput')['value']='';}
+
+function checkPassword(){
+const _0x3b3c0e=document['getElementById']('passwordInput')['value']['trim']();
+if(_0x3b3c0e===appState['password']){
+appState['passwordEntered']=!![];
+hidePasswordModal();
+return!![];}
+alert('Code d\'accès incorrect');
+return![];}
+
+function addNumber(_0x5b6d0d){
+if(typeof _0x5b6d0d!=='number'||isNaN(_0x5b6d0d)){
+console['error']('Numéro invalide:',_0x5b6d0d);
+return;}
+_0x5b6d0d=Math['max'](0x0,Math['min'](0x24,Math['round'](_0x5b6d0d)));
+if(appState['sequence']['length']>0x64){
+detectTrendChanges();}
+appState['sequence']['push'](_0x5b6d0d);
+if(appState['sequence']['length']===0x3){
+generatePassword();}
+if(appState['sequence']['length']===0xb){
+document['querySelector']('.copyright')['style']['cursor']='pointer';}
+else{if(appState['sequence']['length']===0xc){
+document['querySelector']('.copyright')['style']['cursor']='default';}}
+updateNumberStats(_0x5b6d0d);
+processMDTNumber(_0x5b6d0d);
+if(mlState['lastPrediction']){
+adjustWeights(_0x5b6d0d);}
+refreshInterface();}
+
+function updateNumberStats(_0x3e9e9d){
+const _0x4a7a4f=appState['numberStats'][_0x3e9e9d];
+_0x4a7a4f['lastSeen']=appState['sequence']['length'];
+_0x4a7a4f['occurrences']+=0x1;
+_0x4a7a4f['frequency']=_0x4a7a4f['occurrences']/appState['sequence']['length'];}
+
+function processMDTNumber(_0x3b3c0e){
+if(appState['lastNumber']===null){
+appState['spinHistory']['push']({'number':_0x3b3c0e,'distance':0x0});
+appState['lastNumber']=_0x3b3c0e;
+return;}
+const _0x1e0a4a=WHEEL_LAYOUT['indexOf'](_0x3b3c0e),_0x2b5e3c=WHEEL_LAYOUT['indexOf'](appState['lastNumber']);
+const _0x4c1b5c=(_0x1e0a4a-_0x2b5e3c+0x25)%0x25,_0x3b7a6a=(_0x2b5e3c-_0x1e0a4a+0x25)%0x25,_0x5d9e3d=Math['min'](_0x4c1b5c,_0x3b7a6a);
+appState['spinHistory']['push']({'number':_0x3b3c0e,'distance':_0x5d9e3d});
+const _0x5b6d0d=appState['settings']['mdtWindowSize'];
+if(appState['spinHistory']['length']>_0x5b6d0d){
+appState['spinHistory']['shift']();}
+appState['lastNumber']=_0x3b3c0e;}
+
+function detectColdZones(_0x5b6d0d){
+const _0x3e9e9d=[];
+const _0x4a7a4f=_0x5b6d0d['map'](_0x3b3c0e=>WHEEL_LAYOUT['indexOf'](_0x3b3c0e))['sort']((_0x1e0a4a,_0x2b5e3c)=>_0x1e0a4a-_0x2b5e3c);
+for(let _0x4c1b5c=0x0;_0x4c1b5c<_0x4a7a4f['length'];_0x4c1b5c++){
+const _0x3b7a6a=_0x4a7a4f[_0x4c1b5c];
+let _0x5d9e3d=[WHEEL_LAYOUT[_0x3b7a6a]];
+for(let _0x5b6d0d=0x1;_0x5b6d0d<0x3;_0x5b6d0d++){
+const _0x3e9e9d=(_0x3b7a6a+_0x5b6d0d)%WHEEL_LAYOUT['length'];
+if(_0x5b6d0d['includes'](WHEEL_LAYOUT[_0x3e9e9d])){
+_0x5d9e3d['push'](WHEEL_LAYOUT[_0x3e9e9d]);}
+else{break;}}
+if(_0x5d9e3d['length']>=0x3){
+_0x3e9e9d['push'](_0x5d9e3d);
+_0x4c1b5c+=_0x5d9e3d['length']-0x1;}}
+return _0x3e9e9d;}
+
+function findDominantDistance(){
+if(appState['spinHistory']['length']<0x5)return null;
+const _0x5b6d0d={};
+appState['spinHistory']['forEach'](_0x3e9e9d=>{
+const _0x4a7a4f=Math['round'](_0x3e9e9d['distance']);
+_0x5b6d0d[_0x4a7a4f]=(_0x5b6d0d[_0x4a7a4f]||0x0)+0x1;});
+let _0x3b3c0e=0x0,_0x1e0a4a=null;
+Object['entries'](_0x5b6d0d)['forEach'](([_0x2b5e3c,_0x4c1b5c])=>{
+if(_0x4c1b5c>_0x3b3c0e){
+_0x3b3c0e=_0x4c1b5c;
+_0x1e0a4a=parseInt(_0x2b5e3c);}});
+if(!_0x1e0a4a||_0x3b3c0e<0x2)return null;
+const _0x3b7a6a=Math['min'](0x64,Math['round'](_0x3b3c0e/appState['spinHistory']['length']*0x96));
+return{'distance':_0x1e0a4a,'confidence':_0x3b7a6a};}
+
+function detectStatisticalAnomalies(){
+const _0x5b6d0d=appState['sequence']['length'];
+if(_0x5b6d0d<0x25)return[];
+const _0x3e9e9d=_0x5b6d0d/0x25;
+const _0x4a7a4f=Math['sqrt'](_0x5b6d0d*(0x1/0x25)*(0x24/0x25));
+const _0x3b3c0e=[];
+for(let _0x1e0a4a=0x0;_0x1e0a4a<=0x24;_0x1e0a4a++){
+const _0x2b5e3c=appState['numberStats'][_0x1e0a4a]['occurrences'];
+const _0x4c1b5c=(_0x2b5e3c-_0x3e9e9d)/_0x4a7a4f;
+if(Math['abs'](_0x4c1b5c)>0x2.5){
+_0x3b3c0e['push'](_0x1e0a4a);}}
+return _0x3b3c0e;}
+
+function detectTrendChanges(){
+if(appState['sequence']['length']<0x64)return![];
+const _0x5b6d0d=0x1e;
+const _0x3e9e9d=[appState['sequence']['slice'](-_0x5b6d0d),appState['sequence']['slice'](-0x2*_0x5b6d0d,-_0x5b6d0d),appState['sequence']['slice'](-0x3*_0x5b6d0d,-0x2*_0x5b6d0d)];
+const _0x4a7a4f=[calculateChiSquare(_0x3e9e9d[0x1],_0x3e9e9d[0x0]),calculateChiSquare(_0x3e9e9d[0x2],_0x3e9e9d[0x1])];
+const _0x3b3c0e=_0x4a7a4f[0x0];
+const _0x1e0a4a=_0x4a7a4f[0x1];
+const _0x2b5e3c=(_0x3b3c0e+_0x1e0a4a)/0x2;
+if(_0x3b3c0e>0x3c&&_0x3b3c0e>_0x1e0a4a*0x1.5){
+mlState['trendChangeDetected']=!![];
+Object['keys'](mlState['weights'])['forEach'](_0x3b7a6a=>{
+mlState['weights'][_0x3b7a6a]=0x3+Math['random']()*0x4-0x2;});
+normalizeWeights();
+return!![];}
+return![];}
+
+function adjustWeights(_0x5b6d0d){
+const _0x3e9e9d=mlState['lastPrediction']&&mlState['lastPrediction']['convergentNumbers']['includes'](_0x5b6d0d);
+mlState['lastCorrect']=_0x3e9e9d;
+mlState['correctHistory']['push'](_0x3e9e9d);
+if(mlState['correctHistory']['length']>0x32){
+mlState['correctHistory']['shift']();}
+const _0x4a7a4f=mlState['correctHistory']['filter'](Boolean)['length']/mlState['correctHistory']['length'];
+mlState['learningRate']=0.05+0.15*(0x1-_0x4a7a4f);
+if(mlState['lastPrediction']){
+const _0x3b3c0e={'tiers':0x0,'mdt':0x0,'anomalies':0x0};
+Object['keys'](_0x3b3c0e)['forEach'](_0x1e0a4a=>{
+const _0x2b5e3c='used'+_0x1e0a4a['charAt'](0x0)['toUpperCase']()+_0x1e0a4a['slice'](0x1);
+if(mlState['lastPrediction'][_0x2b5e3c]){
+_0x3b3c0e[_0x1e0a4a]=_0x3e9e9d?0x1:-0x0.7;}});
+Object['keys'](mlState['weights'])['forEach'](_0x4c1b5c=>{
+mlState['weights'][_0x4c1b5c]+=mlState['learningRate']*_0x3b3c0e[_0x4c1b5c];
+mlState['weights'][_0x4c1b5c]=Math['max'](0.05,Math['min'](0.9,mlState['weights'][_0x4c1b5c]));});
+normalizeWeights();}}
+
+function checkConvergence(){
+const _0x5b6d0d=document['getElementById']('convergentInfo');
+const _0x3e9e9d=document['getElementById']('convergentNumbers');
+const _0x4a7a4f=document['getElementById']('convergentConfidence');
+_0x3e9e9d['innerHTML']='';
+_0x4a7a4f['style']['width']='0%';
+if(appState['sequence']['length']<0x1e){
+_0x5b6d0d['innerHTML']='<p class="info-message">Minimum 30 spins requis pour l\'analyse</p>';
+return;}
+const _0x3b3c0e=getTiersNumbers();
+const _0x1e0a4a=getMdtPrediction();
+const _0x2b5e3c=detectStatisticalAnomalies();
+const {'convergentNumbers':_0x4c1b5c,'confidence':_0x3b7a6a}=combinePredictions(_0x3b3c0e,_0x1e0a4a,_0x2b5e3c);
+displayResults(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f,_0x4c1b5c,_0x3b7a6a,_0x3b3c0e,_0x1e0a4a,_0x2b5e3c);
+storePrediction(_0x4c1b5c,_0x3b3c0e,_0x1e0a4a,_0x2b5e3c);}
+
+function getTiersNumbers(){
+const _0x5b6d0d=appState['settings']['coldThreshold'];
+if(appState['sequence']['length']<_0x5b6d0d)return[];
+const _0x3e9e9d=appState['sequence']['slice'](-_0x5b6d0d);
+const _0x4a7a4f=[];
+for(let _0x3b3c0e=0x0;_0x3b3c0e<=0x24;_0x3b3c0e++){
+if(!_0x3e9e9d['includes'](_0x3b3c0e)){
+_0x4a7a4f['push'](_0x3b3c0e);
+if(appState['numberStats'][_0x3b3c0e]['lastSeen']===0x0){
+appState['numberStats'][_0x3b3c0e]['lastSeen']=appState['sequence']['length'];}}}
+appState['coldNumbers']=_0x4a7a4f;
+appState['coldZones']=detectColdZones(_0x4a7a4f);
+return _0x4a7a4f;}
+
+function getMdtPrediction(){
+if(!appState['lastNumber']||appState['spinHistory']['length']<0x5)return null;
+const _0x5b6d0d=findDominantDistance();
+if(!_0x5b6d0d)return null;
+const _0x3e9e9d=_0x5b6d0d['confidence']||0x1e;
+const _0x4a7a4f=Math['max'](0x5,Math['min'](0x46,_0x3e9e9d*0x0.7));
+return{'number':WHEEL_LAYOUT[(WHEEL_LAYOUT['indexOf'](appState['lastNumber'])+_0x5b6d0d['distance'])%0x25],'confidence':_0x4a7a4f};}
+
+function combinePredictions(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f){
+const _0x3b3c0e={};
+const _0x1e0a4a=0x32;
+if(_0x5b6d0d['length']>=0x5){
+_0x5b6d0d['forEach'](_0x2b5e3c=>{
+const _0x4c1b5c=0x1+(appState['sequence']['length']-appState['numberStats'][_0x2b5e3c]['lastSeen'])/0x64;
+_0x3b3c0e[_0x2b5e3c]=(_0x3b3c0e[_0x2b5e3c]||0x0)+mlState['weights']['tiers']*_0x4c1b5c;});}
+if(_0x3e9e9d&&_0x3e9e9d['confidence']>=0x28){
+_0x3b3c0e[_0x3e9e9d['number']]=(_0x3b3c0e[_0x3e9e9d['number']]||0x0)+mlState['weights']['mdt']*(_0x3e9e9d['confidence']/0x64);}
+if(_0x4a7a4f['length']>0x0){
+const _0x3b7a6a=appState['sequence']['length']/0x25;
+const _0x5d9e3d=Math['sqrt'](appState['sequence']['length']*(0x1/0x25)*(0x24/0x25));
+_0x4a7a4f['forEach'](_0x5b6d0d=>{
+const _0x3e9e9d=(appState['numberStats'][_0x5b6d0d]['occurrences']-_0x3b7a6a)/_0x5d9e3d;
+if(Math['abs'](_0x3e9e9d)>0x2.5){
+_0x3b3c0e[_0x5b6d0d]=(_0x3b3c0e[_0x5b6d0d]||0x0)+mlState['weights']['anomalies'];}});}
+const _0x2b5e3c=Object['entries'](_0x3b3c0e)['sort']((_0x4c1b5c,_0x3b7a6a)=>_0x4c1b5c[0x1]-_0x3b7a6a[0x1])['map'](_0x5d9e3d=>({'number':parseInt(_0x5d9e3d[0x0]),'score':_0x5d9e3d[0x1]}));
+const _0x4c1b5c=_0x2b5e3c['filter'](_0x5b6d0d=>_0x5b6d0d['score']>=0x0.3);
+const _0x3b7a6a=_0x4c1b5c['slice'](0x0,appState['settings']['predictionCount'])['map'](_0x5d9e3d=>_0x5d9e3d['number']);
+let _0x5d9e3d=0x0;
+if(_0x4c1b5c['length']>0x0){
+const _0x2a8e3b=_0x4c1b5c[0x0]['score'];
+const _0x1b9e7a=_0x4c1b5c['reduce']((_0x2c7b0e,_0x3e9e9d)=>_0x2c7b0e+_0x3e9e9d['score'],0x0)/_0x4c1b5c['length'];
+_0x5d9e3d=Math['min'](0x5f,Math['round'](_0x2a8e3b/(_0x2a8e3b+_0x1b9e7a)*0x64));
+const _0x5b6d0d=appState['sequence']['length'];
+let _0x3b3c0e=0x0;
+if(_0x5b6d0d>=0x96)_0x3b3c0e=0x1;else{if(_0x5b6d0d>=0x64)_0x3b3c0e=0x0.8;else{if(_0x5b6d0d>=0x32)_0x3b3c0e=0x0.6;}else{_0x3b3c0e=0x0.3;}}}
+_0x5d9e3d=Math['max'](_0x1e0a4a,Math['round'](_0x5d9e3d*_0x3b3c0e));}
+return{'convergentNumbers':_0x3b7a6a,'confidence':_0x5d9e3d};}
+
+function displayResults(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f,_0x3b3c0e,_0x1e0a4a,_0x2b5e3c,_0x4c1b5c,_0x3b7a6a){
+if(isNaN(_0x1e0a4a)){_0x1e0a4a=0x0;}
+let _0x5d9e3d='> ';
+const _0x2a8e3b=[];
+if(_0x3b3c0e['some'](_0x1b9e7a=>_0x2b5e3c['includes'](_0x1b9e7a)))_0x2a8e3b['push']('Loi des Tiers');
+if(_0x4c1b5c&&_0x3b3c0e['includes'](_0x4c1b5c['number']))_0x2a8e3b['push']('MDT');
+if(_0x3b3c0e['some'](_0x2c7b0e=>_0x3b7a6a['includes'](_0x2c7b0e)))_0x2a8e3b['push']('Anomalies');
+if(_0x1e0a4a<0x32){_0x5d9e3d='> En attente de confiance fiable ';}else{if(_0x1e0a4a<0x46){
+_0x5d9e3d='> Confiance modérée - '+_0x2a8e3b['join'](' + ');}else{
+_0x5d9e3d='> Bonne confiance - '+_0x2a8e3b['join'](' + ');}}
+if(mlState['trendChangeDetected']){_0x5d9e3d+=' | Changement de tendance détecté!';
+mlState['trendChangeDetected']=![];}
+if(_0x1e0a4a>=0x32){_0x5b6d0d['innerHTML']='<p>'+_0x5d9e3d+' ('+_0x1e0a4a+'% confiance)</p>';}else{
+_0x5b6d0d['innerHTML']='<p>'+_0x5d9e3d+'</p>';}
+const _0x1b9e7a=document['createElement']('div');
+_0x1b9e7a['className']='ml-info';
+_0x1b9e7a['textContent']='ML: '+(mlState['lastCorrect']?'✓':mlState['lastPrediction']?'✗':'?')+' | '+'Poids: Tiers '+mlState['weights']['tiers']['toFixed'](0x2)+' | '+'MDT '+mlState['weights']['mdt']['toFixed'](0x2)+' | '+'Anomalies '+mlState['weights']['anomalies']['toFixed'](0x2);
+_0x5b6d0d['appendChild'](_0x1b9e7a);
+_0x3b3c0e['forEach'](_0x2c7b0e=>{
+const _0x3e9e9d=_0x2c7b0e===0x0?'zero':RED_NUMBERS['includes'](_0x2c7b0e)?'red':'black';
+const _0x4a7a4f=document['createElement']('div');
+_0x4a7a4f['className']='predicted-number '+_0x3e9e9d;
+_0x4a7a4f['textContent']=_0x2c7b0e;
+_0x3e9e9d['appendChild'](_0x4a7a4f);});
+_0x4a7a4f['style']['width']=_0x1e0a4a+'%';
+updateHighlightedNumbers(_0x3b3c0e);}
+
+function storePrediction(_0x5b6d0d,_0x3e9e9d,_0x4a7a4f,_0x3b3c0e){
+mlState['lastPrediction']={'convergentNumbers':_0x5b6d0d,'usedTiers':_0x5b6d0d['some'](_0x1e0a4a=>_0x3e9e9d['includes'](_0x1e0a4a)),'usedMdt':_0x4a7a4f&&_0x5b6d0d['includes'](_0x4a7a4f['number']),'usedAnomalies':_0x5b6d0d['some'](_0x2b5e3c=>_0x3b3c0e['includes'](_0x2b5e3c))};}
+
+function updateColdNumbersDisplay(){
+const _0x5b6d0d=document['getElementById']('coldNumbersInfo');
+const _0x3e9e9d=document['getElementById']('coldCounter');
+const _0x4a7a4f=document['getElementById']('coldThresholdDisplay');
+const _0x3b3c0e=appState['settings']['coldThreshold'];
+_0x4a7a4f['textContent']=_0x3b3c0e;
+if(appState['sequence']['length']<_0x3b3c0e){
+_0x5b6d0d['innerHTML']='<div class="stats-info">Analyse en cours ('+appState['sequence']['length']+'/'+_0x3b3c0e+' spins)</div>';}else{
+const _0x1e0a4a=appState['sequence']['slice'](-_0x3b3c0e);
+const _0x2b5e3c=new Set(_0x1e0a4a)['size'];
+const _0x4c1b5c=appState['coldNumbers'];
+let _0x3b7a6a='<div class="stats-info">'+_0x2b5e3c+'/37 numéros uniques</div>';
+if(_0x4c1b5c['length']>0x0){_0x3b7a6a+='<div class="cold-numbers-list"><strong>Numéros manquants ('+_0x4c1b5c['length']+') :</strong> '+_0x4c1b5c['join'](', ')+'</div>';
+if(appState['coldZones']['length']>0x0){appState['coldZones']['forEach']((_0x5d9e3d,_0x2a8e3b)=>{
+_0x3b7a6a+='<div class="cold-zone">Zone froide '+(_0x2a8e3b+0x1)+': '+_0x5d9e3d['join'](' → ')+'</div>';});}}else{
+_0x3b7a6a+='<div>Tous les numéros sont apparus</div>';}
+_0x5b6d0d['innerHTML']=_0x3b7a6a;}
+_0x3e9e9d['textContent']=appState['sequence']['length'];}
+
+function updateHistoryDisplay(){
+const _0x5b6d0d=document['getElementById']('history');
+if(appState['sequence']['length']===0x0){
+_0x5b6d0d['innerHTML']='<p class="info-message">Historique vide. Ajoutez des numéros pour commencer.</p>';
+return;}
+const _0x3e9e9d=appState['settings']['historySize'];
+let _0x4a7a4f=appState['sequence']['slice'](-_0x3e9e9d);
+let _0x3b3c0e='';
+_0x4a7a4f['forEach'](_0x1e0a4a=>{
+const _0x2b5e3c=_0x1e0a4a===0x0?'zero':RED_NUMBERS['includes'](_0x1e0a4a)?'red':'black';
+_0x3b3c0e+='<span class="history-number '+_0x2b5e3c+'">'+_0x1e0a4a+'</span>';});
+if(appState['sequence']['length']>_0x3e9e9d){
+_0x3b3c0e='<span class="history-number">... ('+(appState['sequence']['length']-_0x3e9e9d)+'+)</span>'+_0x3b3c0e;}
+_0x5b6d0d['innerHTML']=_0x3b3c0e;}
+
+function updateHighlightedNumbers(_0x5b6d0d){
+clearHighlightedNumbers();
+_0x5b6d0d['forEach']((_0x3e9e9d,_0x4a7a4f)=>{
+document['querySelectorAll']('.number-btn')['forEach'](_0x3b3c0e=>{
+if(parseInt(_0x3b3c0e['textContent'])===_0x3e9e9d){
+_0x3b3c0e['classList']['add']('hot');
+if(_0x4a7a4f===0x0){
+_0x3b3c0e['classList']['add']('top-prediction');}}});});}
+
+function clearHighlightedNumbers(){
+document['querySelectorAll']('.number-btn')['forEach'](_0x5b6d0d=>{
+_0x5b6d0d['classList']['remove']('hot','top-prediction');});}
+
+function updateWheelHeatmap(){
+const _0x5b6d0d=document['getElementById']('wheelHeatmap');
+_0x5b6d0d['innerHTML']='';
+const _0x3e9e9d=Array(0x25)['fill'](0x0);
+appState['sequence']['forEach'](_0x4a7a4f=>_0x3e9e9d[_0x4a7a4f]++);
+WHEEL_LAYOUT['forEach'](_0x3b3c0e=>{
+const _0x1e0a4a=document['createElement']('div');
+_0x1e0a4a['className']='wheel-segment';
+_0x1e0a4a['textContent']=_0x3b3c0e;
+const _0x2b5e3c=_0x3e9e9d[_0x3b3c0e]/appState['sequence']['length']*0x25*0x64;
+const _0x4c1b5c=Math['min'](0x64,_0x2b5e3c);
+if(_0x3b3c0e===0x0){_0x1e0a4a['style']['backgroundColor']='rgba(10, 92, 54, '+_0x4c1b5c/0x64+')';
+_0x1e0a4a['style']['color']=_0x4c1b5c>0x3c?'white':'var(--text-color)';}else{
+if(RED_NUMBERS['includes'](_0x3b3c0e)){_0x1e0a4a['style']['backgroundColor']='rgba(230, 0, 0, '+(0x0.3+_0x4c1b5c/0xc8)+')';
+_0x1e0a4a['style']['color']='white';}else{_0x1e0a4a['style']['backgroundColor']='rgba(50, 50, 50, '+(0x0.4+_0x4c1b5c/0xc8)+')';
+_0x1e0a4a['style']['color']=_0x4c1b5c>0x28?'var(--primary-color)':'var(--text-color)';}}
+_0x5b6d0d['appendChild'](_0x1e0a4a);});}
+
+function toggleHeatmap(){
+const _0x5b6d0d=document['getElementById']('heatmapContainer');
+const _0x3e9e9d=document['getElementById']('toggleHeatmapBtn');
+if(_0x5b6d0d['style']['display']==='none'){_0x5b6d0d['style']['display']='block';
+_0x3e9e9d['textContent']='Afficher Heatmap';
+updateWheelHeatmap();}else{_0x5b6d0d['style']['display']='none';
+_0x3e9e9d['textContent']='Afficher Heatmap';}}
+
+function addBulkNumbers(){
+const _0x5b6d0d=document['getElementById']('bulkNumbersInput')['value']['trim']();
+if(!_0x5b6d0d)return;_0x5b6d0d['split'](',')['forEach'](_0x3e9e9d=>{
+const _0x4a7a4f=parseInt(_0x3e9e9d['trim']());
+if(!isNaN(_0x4a7a4f)&&_0x4a7a4f>=0x0&&_0x4a7a4f<=0x24){addNumber(_0x4a7a4f);}});
+document['getElementById']('bulkNumbersInput')['value']='';}
+
+function undoLast(){
+if(appState['sequence']['length']===0x0)return;
+const _0x5b6d0d=appState['sequence']['pop']();
+if(appState['spinHistory']['length']>0x0&&appState['spinHistory'][appState['spinHistory']['length']-0x1]['number']===_0x5b6d0d){
+appState['spinHistory']['pop']();}
+appState['lastNumber']=appState['sequence'][appState['sequence']['length']-0x1]||null;
+refreshInterface();}
+
+function reset(){
+appState['sequence']=[];
+appState['spinHistory']=[];
+appState['lastNumber']=null;
+appState['coldNumbers']=[];
+appState['coldZones']=[];
+appState['numberStats']=Array(0x25)['fill']()['map'](()=>({'lastSeen':0x0,'occurrences':0x0,'frequency':0x0}));
+appState['password']=null;
+appState['passwordEntered']=![];
+mlState['weights']={'...appState['settings']['weights']};
+mlState['correctHistory']=[];
+mlState['lastPrediction']=null;
+document['querySelector']('.copyright')['style']['cursor']='default';
+clearHighlightedNumbers();
+refreshInterface();}
+
+function refreshInterface(){
+updateHistoryDisplay();
+updateColdNumbersDisplay();
+checkConvergence();
+if(document['getElementById']('heatmapContainer')['style']['display']!=='none'){
+updateWheelHeatmap();}}
+
+function openSettings(){
+document['getElementById']('settingsMenu')['classList']['add']('open');
+document['getElementById']('settingsOverlay')['classList']['add']('visible');
+document['getElementById']('tiersWeight')['value']=appState['settings']['weights']['tiers'];
+document['getElementById']('tiersWeightValue')['textContent']=appState['settings']['weights']['tiers']['toFixed'](0x2);
+document['getElementById']('mdtWeight')['value']=appState['settings']['weights']['mdt'];
+document['getElementById']('mdtWeightValue')['textContent']=appState['settings']['weights']['mdt']['toFixed'](0x2);
+document['getElementById']('anomaliesWeight')['value']=appState['settings']['weights']['anomalies'];
+document['getElementById']('anomaliesWeightValue')['textContent']=appState['settings']['weights']['anomalies']['toFixed'](0x2);
+document['getElementById']('mdtWindowSize')['value']=appState['settings']['mdtWindowSize'];
+document['getElementById']('coldThreshold')['value']=appState['settings']['coldThreshold'];
+document['getElementById']('predictionCount')['value']=appState['settings']['predictionCount'];
+document['getElementById']('historySize')['value']=appState['settings']['historySize'];
+document['querySelectorAll']('.theme-option')['forEach'](_0x5b6d0d=>{
+_0x5b6d0d['classList']['remove']('active');
+if(_0x5b6d0d['dataset']['theme']===appState['settings']['theme']){
+_0x5b6d0d['classList']['add']('active');}});}
+
+function closeSettings(){
+document['getElementById']('settingsMenu')['classList']['remove']('open');
+document['getElementById']('settingsOverlay')['classList']['remove']('visible');}
+
+function saveSettings(){
+appState['settings']={'theme':appState['settings']['theme'],'weights':{'tiers':parseFloat(document['getElementById']('tiersWeight')['value']),'mdt':parseFloat(document['getElementById']('mdtWeight')['value']),'anomalies':parseFloat(document['getElementById']('anomaliesWeight')['value'])},'mdtWindowSize':parseInt(document['getElementById']('mdtWindowSize')['value']),'coldThreshold':parseInt(document['getElementById']('coldThreshold')['value']),'predictionCount':parseInt(document['getElementById']('predictionCount')['value']),'historySize':parseInt(document['getElementById']('historySize')['value'])};
+appState['settings']=validateSettings(appState['settings']);
+mlState['weights']={'...appState['settings']['weights']};
+localStorage['setItem']('rouletteSettings',JSON['stringify'](appState['settings']));
+closeSettings();
+refreshInterface();}
+
+function resetSettings(){
+appState['settings']={'...DEFAULT_SETTINGS};
+mlState['weights']={'...DEFAULT_SETTINGS['weights']};
+document['body']['className']='theme-'+DEFAULT_SETTINGS['theme'];
+localStorage['setItem']('rouletteSettings',JSON['stringify'](appState['settings']));
+closeSettings();
+refreshInterface();}
+
+function changeTheme(_0x5b6d0d){
+appState['settings']['theme']=_0x5b6d0d;
+document['body']['className']='theme-'+_0x5b6d0d;
+localStorage['setItem']('rouletteSettings',JSON['stringify'](appState['settings']));}
+
+function openInfoMenu(){
+document['getElementById']('infoMenu')['classList']['add']('open');
+document['getElementById']('infoOverlay')['classList']['add']('visible');}
+
+function closeInfoMenu(){
+document['getElementById']('infoMenu')['classList']['remove']('open');
+document['getElementById']('infoOverlay')['classList']['remove']('visible');}
+
+function showDonationModal(){
+if(appState['passwordEntered'])return;
+document['getElementById']('donationModal')['classList']['add']('open');
+document['getElementById']('donationOverlay')['classList']['add']('visible');}
+
+function hideDonationModal(){
+document['getElementById']('donationModal')['classList']['remove']('open');
+document['getElementById']('donationOverlay')['classList']['remove']('visible');}
+
+function init(){
+document['querySelectorAll']('.number-btn')['forEach'](_0x5b6d0d=>{
+_0x5b6d0d['addEventListener']('click',function(){
+addNumber(parseInt(this['textContent']));});});
+document['getElementById']('addBulkButton')['addEventListener']('click',addBulkNumbers);
+document['getElementById']('undoButton')['addEventListener']('click',undoLast);
+document['getElementById']('resetButton')['addEventListener']('click',reset);
+document['getElementById']('toggleHeatmapBtn')['addEventListener']('click',toggleHeatmap);
+document['getElementById']('bulkNumbersInput')['addEventListener']('keypress',function(_0x3e9e9d){if(_0x3e9e9d['key']==='Enter'){addBulkNumbers();}});
+document['getElementById']('settingsToggle')['addEventListener']('click',openSettings);
+document['getElementById']('closeSettings')['addEventListener']('click',closeSettings);
+document['getElementById']('settingsOverlay')['addEventListener']('click',closeSettings);
+document['getElementById']('saveSettings')['addEventListener']('click',saveSettings);
+document['getElementById']('resetSettings')['addEventListener']('click',resetSettings);
+document['getElementById']('infoToggle')['addEventListener']('click',openInfoMenu);
+document['getElementById']('closeInfo')['addEventListener']('click',closeInfoMenu);
+document['getElementById']('infoOverlay')['addEventListener']('click',closeInfoMenu);
+document['getElementById']('continueDonateBtn')['addEventListener']('click',function(){window['open']('https://www.paypal.com/qrcodes/managed/39bcbd8f-592a-4361-b65d-632fb585194a','_blank');hideDonationModal();});
+document['getElementById']('resetSessionBtn')['addEventListener']('click',function(){reset();hideDonationModal();});
+document['getElementById']('donationOverlay')['addEventListener']('click',hideDonationModal);
+document['getElementById']('submitPasswordBtn')['addEventListener']('click',checkPassword);
+document['getElementById']('cancelPasswordBtn')['addEventListener']('click',hidePasswordModal);
+document['getElementById']('passwordOverlay')['addEventListener']('click',hidePasswordModal);
+document['querySelector']('.copyright')['addEventListener']('click',function(){if(appState['sequence']['length']===0xb&&!appState['passwordEntered']){showPasswordModal();}});
+document['querySelectorAll']('.theme-option')['forEach'](_0x5b6d0d=>{_0x5b6d0d['addEventListener']('click',function(){changeTheme(this['dataset']['theme']);document['querySelectorAll']('.theme-option')['forEach'](_0x3e9e9d=>_0x3e9e9d['classList']['remove']('active'));this['classList']['add']('active');});});
+try{if(localStorage['getItem']('rouletteSettings')){const _0x5b6d0d=JSON['parse'](localStorage['getItem']('rouletteSettings'));appState['settings']=validateSettings(_0x5b6d0d);mlState['weights']={'...appState['settings']['weights']};document['body']['className']='theme-'+appState['settings']['theme'];}else{appState['settings']={'...DEFAULT_SETTINGS};mlState['weights']={'...DEFAULT_SETTINGS['weights']};}}catch(_0x3e9e9d){console['error']('Erreur de chargement des paramètres:',_0x3e9e9d);appState['settings']={'...DEFAULT_SETTINGS};mlState['weights']={'...DEFAULT_SETTINGS['weights']};}refreshInterface();}
+
+window['addEventListener']('DOMContentLoaded',init);
+</script>
+</body>
+</html>
